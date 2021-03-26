@@ -1,0 +1,30 @@
+name: Atualizar pacote no Nuget.org
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: action/checkout@main
+
+    - name: Configurar .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '5.0.x'
+
+    - name: Contruir
+      run: dotnet build --configuration Release
+
+    - name: Testar
+      run: dotnet test
+    
+    - name: Criar pacote
+      run: dotnet pack --configuration Release
+
+    - name: Publicar
+      run: dotnet nuget push .\src\Sefaz.Core\bin\Release\*.nupkg -k ${{ secrets.NUGET_TOKEN }} -s https://api.nuget.org/v3/index.json
