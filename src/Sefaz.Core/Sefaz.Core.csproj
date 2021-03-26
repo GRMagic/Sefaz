@@ -1,7 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-  </PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
 
+    <PackageId>rmdev.sefaz</PackageId>
+    <Version>0.0.2</Version>
+    <License>MIT</License>
+    <Authors>Gustavo Rossi Müller</Authors>
+    <PackageDescription>Biblioteca para auxiliar no download de notas fiscais</PackageDescription>
+    <Description>Biblioteca para auxiliar no download de notas fiscais</Description>
+    <RepositoryUrl>https://github.com/GRMagic/Sefaz</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/GRMagic/Sefaz</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>SEFAZ;NFE;CTE;Nota Fiscal</PackageTags>
+    <Title>RM Dev - Sefaz</Title>
+    <Summary>Faz o download de XMLs da Sefaz</Summary>
+  </PropertyGroup>
+  
 </Project>
