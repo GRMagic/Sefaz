@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
 
     <PackageId>rmdev.sefaz</PackageId>
-    <Version>0.0.3</Version>
+    <Version>0.0.4</Version>
     <License>MIT</License>
     <Authors>Gustavo Rossi Müller</Authors>
     <PackageDescription>Biblioteca para auxiliar no download de notas fiscais</PackageDescription>
