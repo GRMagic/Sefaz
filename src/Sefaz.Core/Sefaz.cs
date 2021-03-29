@@ -11,12 +11,22 @@ using System.Xml.Serialization;
 
 namespace Sefaz.Core
 {
+    /// <summary>
+    /// Classe utilizada para comunicar-se com a Sefaz
+    /// </summary>
     public class Sefaz : IDisposable
     {
         private X509Certificate2 Certificado;
         private string _EndPointNFeDistribuicaoDFe;
         private TAmb _Ambiente;
 
+        /// <summary>
+        /// Construtor
+        /// </summary>
+        /// <param name="certificado">Caminho do certificado</param>
+        /// <param name="senha">Senha do certificado</param>
+        /// <param name="ambiente">Ambiente de produção ou homologação</param>
+        /// <param name="endPointNFeDistribuicaoDFe">Endereço do serviço</param>
         public Sefaz(string certificado, 
                      string senha = null, 
                      TAmb ambiente = TAmb.Producao,
@@ -86,8 +96,8 @@ namespace Sefaz.Core
         /// <summary>
         /// Chama o WS da Sefaz para baixar a NFe
         /// </summary>
-        /// <param name="cUF">Código IBGE da UF do destinatário</param>
-        /// <param name="cnpj">CNPJ do destinatário</param>
+        /// <param name="cUF">Código IBGE da UF</param>
+        /// <param name="cnpj">CNPJ</param>
         /// <param name="chave">Chave da nota</param>
         /// <param name="caminhoXML">Quando informado tenta salvar o XML no caminho específicado</param>
         /// <returns>XML retornado pela Sefaz já deserializado em um objeto</returns>
@@ -120,6 +130,9 @@ namespace Sefaz.Core
             return retorno;
         }
 
+        /// <summary>
+        /// Libera recursos
+        /// </summary>
         public void Dispose() => Certificado?.Dispose();
     }
 }
