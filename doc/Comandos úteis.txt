@@ -1,0 +1,3 @@
+Gerar classes usando xsd
+
+xsd distDFeInt_v1.01.xsd retDistDFeInt_v1.01.xsd /c /n:Sefaz.Core.Meta.NFeDistDFe
