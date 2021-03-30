@@ -17,14 +17,11 @@ jobs:
       with:
         dotnet-version: '5.0.x'
 
-    - name: Contruir
+    - name: Contruir e Criar Pacote
       run: dotnet build --configuration Release
 
     - name: Testar
       run: dotnet test
     
-    - name: Criar pacote
-      run: dotnet pack --configuration Release
-
     - name: Publicar
       run: dotnet nuget push ./src/Sefaz.Core/bin/Release/*.nupkg -k ${{ secrets.NUGET_TOKEN }} -s https://api.nuget.org/v3/index.json

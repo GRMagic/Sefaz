@@ -2,9 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    
     <PackageId>rmdev.sefaz</PackageId>
-    <Version>0.0.5</Version>
+    <Version>0.0.6</Version>
     <License>MIT</License>
     <Authors>Gustavo Rossi Müller</Authors>
     <PackageDescription>Biblioteca para auxiliar no download de notas fiscais</PackageDescription>
@@ -18,7 +19,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <DocumentationFile>bin/$(Configuration)/$(TargetFramework)/$(AssemblyName).xml</DocumentationFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   
   <ItemGroup>
