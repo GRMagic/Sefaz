@@ -26,7 +26,7 @@ namespace Sefaz.Exemplo
             var pasta = @"D:\Temp\";
 
             // Download do xml assinado (com valor fiscal)
-            var doc = await sefaz.DownloadNFe(cUF, cnpj, chaveNFe);
+            var doc = await sefaz.BaixarNFe(cUF, cnpj, chaveNFe);
 
             doc.SalvarArquivo($@"{pasta}{chaveNFe}.xml");
 
