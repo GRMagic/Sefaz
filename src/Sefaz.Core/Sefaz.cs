@@ -1,6 +1,7 @@
 ﻿using Sefaz.Core.Meta.NFeDistDFe;
 using Sefaz.WCF;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -99,9 +100,8 @@ namespace Sefaz.Core
         /// <param name="cUF">Código IBGE da UF</param>
         /// <param name="cnpj">CNPJ</param>
         /// <param name="chave">Chave da nota</param>
-        /// <param name="caminhoXML">Quando informado tenta salvar o XML no caminho específicado</param>
-        /// <returns>XML retornado pela Sefaz já deserializado em um objeto</returns>
-        public async Task<retDistDFeInt> DownloadNFe(string cUF, string cnpj, string chave, string caminhoXML = null)
+        /// <returns>Documento retornado pela SEFAZ</returns>
+        public async Task<Documento> DownloadNFe(string cUF, string cnpj, string chave)
         {
 
             // Dados
@@ -113,21 +113,74 @@ namespace Sefaz.Core
             // Chamada
             var retorno = await ChamarWsNfe(cUF, cnpj, dados);
 
-            // Salvar o arquivo
-            if (caminhoXML != null)
+            try
             {
-                string retNFe = null;
-                try
+                var nota = retorno.loteDistDFeInt.docZip.Where(d => d.schema.StartsWith("procNFe_")).FirstOrDefault();
+                return new Documento
                 {
-                    var nota = retorno.loteDistDFeInt.docZip.Where(d => d.schema.StartsWith("procNFe_")).FirstOrDefault();
-                    var xml = nota.Decompress();
-                    retNFe = xml.OuterXml;
-                }
-                catch { }
-                if (retNFe != null) File.WriteAllText(caminhoXML, retNFe, new UTF8Encoding(false)); // Salva como UTF8 sem BOM (igual quando baixa pelo site da fazenda)
+                    NSU = nota.NSU,
+                    Schema = nota.schema,
+                    Xml = nota.Decompress()
+                };
+            }
+            catch {
+                throw new SefazException(retorno.cStat, retorno.xMotivo);
             }
 
-            return retorno;
+        }
+
+        /// <summary>
+        /// Chama o WS da Sefaz para consultar as notas
+        /// </summary>
+        /// <param name="cUF">Código IBGE da UF da empresa</param>
+        /// <param name="cnpj">CNPJ do interessado</param>
+        /// <param name="ultimoNSU">NSU mais recente conhecido (Quando informado 0 retorna as notas dos últimos 90 dias)</param>
+        /// <param name="todosLotes">Consultar automaticamente todos os lotes até o mais atual?</param>
+        /// <returns>XML retornado pela Sefaz já deserializado em um objeto</returns>
+        /// <remarks>ATENÇÃO! Consultas grandes e frequentes podem causar bloqueio temporário do serviço. Evite usar ultNSU=0 mais de uma vez por hora.</remarks>
+        public async Task<ListaDocumentos> ConsultarNFeCNPJ(string cUF, string cnpj, long ultimoNSU = 0, bool todosLotes = true)
+        {
+            var lista = new ListaDocumentos();
+            lista.UltimoNSU = ultimoNSU;
+
+            do
+            {
+                // Chamada ao serviço
+                var consulta = await ChamarWsNfe(cUF, cnpj, new distDFeIntDistNSU
+                {
+                    ultNSU = lista.UltimoNSU.ToString("000000000000000") // 15 algarismos!
+                });
+
+                // Tratamento do retorno
+                long.TryParse(consulta.ultNSU, out lista.UltimoNSU); // A SEFAZ manda os registros em lotes. Guardamos o ultNSU para saber onde continuar a busca
+                long.TryParse(consulta.maxNSU, out lista.NSUMaximo);
+                lista.DataHoraResposta = DateTime.ParseExact(consulta.dhResp, "yyyy-MM-ddTHH:mm:sszzz", null);
+
+                switch (consulta.cStat)
+                {
+                    case "137": // Nenhum documento localizado para o interessado
+                        break;
+
+                    case "138": // Documento(s) localizado(s) para o interessado 
+                        foreach (var docZip in consulta.loteDistDFeInt.docZip)
+                        {
+                            var documento = new Documento()
+                            {
+                                NSU = docZip.NSU,
+                                Schema = docZip.schema,
+                                Xml = docZip.Decompress()
+                            };
+                            lista.Documentos.Add(documento);
+                        }
+                        break;
+
+                    default:
+                        throw new SefazException(consulta.cStat, consulta.xMotivo);
+                }
+
+            } while (todosLotes && lista.UltimoNSU < lista.NSUMaximo);
+
+            return lista;
         }
 
         /// <summary>
