@@ -1,6 +1,4 @@
-﻿using Sefaz.Core;
-using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Sefaz.Exemplo
 {
@@ -22,8 +20,8 @@ namespace Sefaz.Exemplo
             // -------------- Baixar uma NFe pela Chave --------------
 
             // Chave da nota que vamos baixar. A nota precisa ter pelo menos manifesto de ciência da emissão.
-            var chaveNFe = "123456789901234567889012345678901234";
-
+            var chaveNFe = "12345678901234567890123456789012345678901234";
+            
             // Local onde vamos salvar a nota
             var pasta = @"D:\Temp\";
 

@@ -130,7 +130,7 @@ namespace Sefaz.Core
         }
 
         /// <summary>
-        /// Chama o WS da Sefaz para consultar as notas
+        /// Chama o WS da SEFAZ para consultar as notas e eventos de notas
         /// </summary>
         /// <param name="cUF">Código IBGE da UF da empresa</param>
         /// <param name="cnpj">CNPJ do interessado</param>
