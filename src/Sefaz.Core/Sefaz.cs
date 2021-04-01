@@ -1,7 +1,6 @@
 ﻿using Sefaz.Core.Meta.NFeDistDFe;
 using Sefaz.WCF;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -101,7 +100,18 @@ namespace Sefaz.Core
         /// <param name="cnpj">CNPJ</param>
         /// <param name="chave">Chave da nota</param>
         /// <returns>Documento retornado pela SEFAZ</returns>
-        public async Task<Documento> DownloadNFe(string cUF, string cnpj, string chave)
+        [Obsolete("O nome dessa função mudou para BaixarNFe.")]
+        public async Task<Documento> DownloadNFe(string cUF, string cnpj, string chave) => await BaixarNFe(cUF, cnpj, chave);
+
+
+        /// <summary>
+        /// Chama o WS da Sefaz para baixar a NFe
+        /// </summary>
+        /// <param name="cUF">Código IBGE da UF</param>
+        /// <param name="cnpj">CNPJ</param>
+        /// <param name="chave">Chave da nota</param>
+        /// <returns>Documento retornado pela SEFAZ</returns>
+        public async Task<Documento> BaixarNFe(string cUF, string cnpj, string chave)
         {
 
             // Dados
