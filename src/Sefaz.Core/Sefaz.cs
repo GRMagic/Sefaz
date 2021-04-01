@@ -43,7 +43,7 @@ namespace Sefaz.Core
         /// <param name="cUF">Código da UF (IBGE)</param>
         /// <param name="cnpj">CNPJ da empresa (14 dígitos - sem máscara)</param>
         /// <param name="dados">Dados que serão enviados para o webservice</param>
-        private async Task<retDistDFeInt> ChamarWsNfe(string cUF, string cnpj, object dados)
+        private async Task<retDistDFeInt> ChamarWsNFe(string cUF, string cnpj, object dados)
         {
             if (DateTime.UtcNow > Certificado.NotAfter) throw new Exception($"O certificado venceu em {Certificado.NotAfter}!");
             if (DateTime.UtcNow < Certificado.NotBefore) throw new Exception("O certificado ainda não é válido!");
@@ -121,14 +121,14 @@ namespace Sefaz.Core
             };
 
             // Chamada
-            var retorno = await ChamarWsNfe(cUF, cnpj, dados);
+            var retorno = await ChamarWsNFe(cUF, cnpj, dados);
 
             try
             {
                 var nota = retorno.loteDistDFeInt.docZip.Where(d => d.schema.StartsWith("procNFe_")).FirstOrDefault();
                 return new Documento
                 {
-                    NSU = nota.NSU,
+                    NSU = long.Parse(nota.NSU),
                     Schema = nota.schema,
                     Xml = nota.Decompress()
                 };
@@ -136,6 +136,34 @@ namespace Sefaz.Core
             catch {
                 throw new SefazException(retorno.cStat, retorno.xMotivo);
             }
+        }
+
+        /// <summary>
+        /// Chama o WS de distribuição de NFe da Sefaz para consultar um NSU
+        /// </summary>
+        /// <param name="cUF">Código IBGE da UF</param>
+        /// <param name="cnpj">CNPJ do interessado</param>
+        /// <param name="nsu">Número sequencial único</param>
+        /// <returns>Documento retornado pela SEFAZ, não necessariamente uma NFe, pode ser algum evento por exemplo</returns>
+        public async Task<Documento> ConsultarNFeNSU(string cUF, string cnpj, long nsu)
+        {
+            // Dados
+            var dados = new distDFeIntConsNSU
+            {
+                NSU = nsu.ToString("000000000000000")
+            };
+
+            // Chamada
+            var retorno = await ChamarWsNFe(cUF, cnpj, dados);
+
+            var doc = retorno.loteDistDFeInt.docZip.First();
+
+            return new Documento
+            {
+                NSU = long.Parse(doc.NSU),
+                Schema = doc.schema,
+                Xml = doc.Decompress()
+            };
 
         }
 
@@ -156,7 +184,7 @@ namespace Sefaz.Core
             do
             {
                 // Chamada ao serviço
-                var consulta = await ChamarWsNfe(cUF, cnpj, new distDFeIntDistNSU
+                var consulta = await ChamarWsNFe(cUF, cnpj, new distDFeIntDistNSU
                 {
                     ultNSU = lista.UltimoNSU.ToString("000000000000000") // 15 algarismos!
                 });
@@ -176,7 +204,7 @@ namespace Sefaz.Core
                         {
                             var documento = new Documento()
                             {
-                                NSU = docZip.NSU,
+                                NSU = long.Parse(docZip.NSU),
                                 Schema = docZip.schema,
                                 Xml = docZip.Decompress()
                             };

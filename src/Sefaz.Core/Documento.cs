@@ -11,7 +11,7 @@ namespace Sefaz.Core
         /// <summary>
         /// Sequencial de controle utilizado pela SEFAZ para identificar o documento
         /// </summary>
-        public string NSU { get; set; }
+        public long NSU { get; set; }
 
         /// <summary>
         /// Schema do XML

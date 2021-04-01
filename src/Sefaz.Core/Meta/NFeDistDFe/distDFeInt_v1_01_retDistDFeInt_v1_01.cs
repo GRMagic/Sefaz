@@ -22,7 +22,7 @@ namespace Sefaz.Core.Meta.NFeDistDFe {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://www.portalfiscal.inf.br/nfe", IsNullable=false)]
-    internal partial class distDFeInt {
+    public partial class distDFeInt {
         
         private TAmb tpAmbField;
         
@@ -138,7 +138,7 @@ namespace Sefaz.Core.Meta.NFeDistDFe {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
-    internal enum TCodUfIBGE {
+    public enum TCodUfIBGE {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("11")]
@@ -253,7 +253,7 @@ namespace Sefaz.Core.Meta.NFeDistDFe {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe", IncludeInSchema=false)]
-    internal enum CpfCnpjChoiceType
+    public enum CpfCnpjChoiceType
     {
         
         /// <remarks/>
@@ -269,7 +269,7 @@ namespace Sefaz.Core.Meta.NFeDistDFe {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-    internal partial class distDFeIntConsChNFe {
+    public partial class distDFeIntConsChNFe {
         
         private string chNFeField;
         
@@ -290,7 +290,7 @@ namespace Sefaz.Core.Meta.NFeDistDFe {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-    internal partial class distDFeIntConsNSU {
+    public partial class distDFeIntConsNSU {
         
         private string nSUField;
         
@@ -312,7 +312,7 @@ namespace Sefaz.Core.Meta.NFeDistDFe {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-    internal partial class distDFeIntDistNSU {
+    public partial class distDFeIntDistNSU {
         
         private string ultNSUField;
         
@@ -332,7 +332,7 @@ namespace Sefaz.Core.Meta.NFeDistDFe {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
     [System.SerializableAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/nfe")]
-    internal enum TVerDistDFe {
+    public enum TVerDistDFe {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlEnumAttribute("1.01")]
@@ -346,7 +346,7 @@ namespace Sefaz.Core.Meta.NFeDistDFe {
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
     [System.Xml.Serialization.XmlRootAttribute(Namespace="http://www.portalfiscal.inf.br/nfe", IsNullable=false)]
-    internal partial class retDistDFeInt {
+    public partial class retDistDFeInt {
         
         private TAmb tpAmbField;
         
@@ -466,7 +466,7 @@ namespace Sefaz.Core.Meta.NFeDistDFe {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-    internal partial class retDistDFeIntLoteDistDFeInt {
+    public partial class retDistDFeIntLoteDistDFeInt {
         
         private retDistDFeIntLoteDistDFeIntDocZip[] docZipField;
         
@@ -488,7 +488,7 @@ namespace Sefaz.Core.Meta.NFeDistDFe {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/nfe")]
-    internal partial class retDistDFeIntLoteDistDFeIntDocZip {
+    public partial class retDistDFeIntLoteDistDFeIntDocZip {
         
         private string nSUField;
         
