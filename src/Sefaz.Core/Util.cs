@@ -6,6 +6,9 @@ using System.Xml.Serialization;
 
 namespace Sefaz.Core
 {
+    /// <summary>
+    /// Classe estática com algumas funções úteis para o projeto
+    /// </summary>
     public static class Util
     {
         /// <summary>
@@ -69,7 +72,7 @@ namespace Sefaz.Core
         /// </summary>
         /// <param name="docZip">Dados compactados</param>
         /// <returns>Dados descompactados</returns>
-        internal static XmlDocument Decompress(this Meta.NFeDistDFe.retDistDFeIntLoteDistDFeIntDocZip docZip)
+        internal static XmlDocument Decompress(this Meta.retDistDFeIntLoteDistDFeIntDocZip docZip)
         {
             using var strStream = new MemoryStream();
             strStream.Write(docZip.Value, 0, docZip.Value.Length);

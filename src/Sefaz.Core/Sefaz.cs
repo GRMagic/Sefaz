@@ -1,9 +1,12 @@
-﻿using Sefaz.Core.Meta.NFeDistDFe;
-using Sefaz.WCF;
+﻿using Meta.EventoManifestaDest;
+using Sefaz.Core.Meta;
+using Sefaz.WCF.NFeDistribuicaoDFe;
+using Sefaz.WCF.NFeRecepcaoEvento4;
 using System;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -16,9 +19,15 @@ namespace Sefaz.Core
     /// </summary>
     public class Sefaz : IDisposable
     {
-        private X509Certificate2 Certificado;
+        private X509Certificate2 _Certificado;
         private string _EndPointNFeDistribuicaoDFe;
+        private string _EndPointNFeRecepcaoEvento;
         private TAmb _Ambiente;
+
+        /// <summary>
+        /// Código IBGE do orgão que irá recepcionar os eventos de manifesto do destinatário
+        /// </summary>
+        public TCOrgaoIBGE OrgaoManifesto { get; protected set; }
 
         /// <summary>
         /// Construtor
@@ -26,15 +35,25 @@ namespace Sefaz.Core
         /// <param name="certificado">Caminho do certificado</param>
         /// <param name="senha">Senha do certificado</param>
         /// <param name="ambiente">Ambiente de produção ou homologação</param>
-        /// <param name="endPointNFeDistribuicaoDFe">Endereço do serviço</param>
+        /// <param name="endPointNFeDistribuicaoDFe">Endereço do serviço de distribuição de NFe e eventos</param>
+        /// <param name="endPointNFeRecepcaoEvento">Endereço do serviço de recepção de eventos</param>
+        /// <param name="cUFManifesto">Código IBGE do orgão que irá recepcionar eventos de manifesto do destinatário (91 = Ambiente Nacional)</param>
         public Sefaz(string certificado, 
                      string senha = null, 
                      TAmb ambiente = TAmb.Producao,
-                     string endPointNFeDistribuicaoDFe = "https://www1.nfe.fazenda.gov.br/NFeDistribuicaoDFe/NFeDistribuicaoDFe.asmx")
+                     string endPointNFeDistribuicaoDFe = "https://www1.nfe.fazenda.gov.br/NFeDistribuicaoDFe/NFeDistribuicaoDFe.asmx",
+                     string endPointNFeRecepcaoEvento = "https://www.nfe.fazenda.gov.br/NFeRecepcaoEvento4/NFeRecepcaoEvento4.asmx",
+                     string cUFManifesto = "91")
         {
             _EndPointNFeDistribuicaoDFe = endPointNFeDistribuicaoDFe;
+            _EndPointNFeRecepcaoEvento = endPointNFeRecepcaoEvento;
             _Ambiente = ambiente;
-            this.Certificado = new X509Certificate2(certificado, senha, X509KeyStorageFlags.MachineKeySet);
+
+            TCOrgaoIBGE cUF;
+            if (!TCOrgaoIBGE.TryParse("Item" + cUFManifesto, out cUF)) throw new ArgumentException("Código IBGE inválido para recepção de manifestos do destinatário!", nameof(cUFManifesto));
+            OrgaoManifesto = cUF;
+
+            this._Certificado = new X509Certificate2(certificado, senha, X509KeyStorageFlags.MachineKeySet);
         }
 
         /// <summary>
@@ -45,8 +64,8 @@ namespace Sefaz.Core
         /// <param name="dados">Dados que serão enviados para o webservice</param>
         private async Task<retDistDFeInt> ChamarWsNFe(string cUF, string cnpj, object dados)
         {
-            if (DateTime.UtcNow > Certificado.NotAfter) throw new Exception($"O certificado venceu em {Certificado.NotAfter}!");
-            if (DateTime.UtcNow < Certificado.NotBefore) throw new Exception("O certificado ainda não é válido!");
+            if (DateTime.UtcNow > _Certificado.NotAfter) throw new Exception($"O certificado venceu em {_Certificado.NotAfter}!");
+            if (DateTime.UtcNow < _Certificado.NotBefore) throw new Exception("O certificado ainda não é válido!");
 
             // Configuração do ws
             var endpoint = new System.ServiceModel.EndpointAddress(_EndPointNFeDistribuicaoDFe);
@@ -59,11 +78,11 @@ namespace Sefaz.Core
             try
             {
                 // Definição do certificado
-                ws.ClientCredentials.ClientCertificate.Certificate = Certificado;
+                ws.ClientCredentials.ClientCertificate.Certificate = _Certificado;
 
                 // Dados
                 TCodUfIBGE eUF;
-                 if (!TCodUfIBGE.TryParse("Item" + cUF, out eUF)) throw new Exception("Código IBGE da UF Inválido!");
+                 if (!TCodUfIBGE.TryParse("Item" + cUF, out eUF)) throw new ArgumentException("Código IBGE da UF Inválido!", nameof(cUF));
                 using var memoryStream = new MemoryStream();
                 using var streamWriter = new StreamWriter(memoryStream);
 
@@ -72,7 +91,7 @@ namespace Sefaz.Core
                     tpAmb = _Ambiente,
                     cUFAutor = eUF,
                     cUFAutorSpecified = true,
-                    ItemElementName = cnpj.Length > 11 ? CpfCnpjChoiceType.CNPJ : CpfCnpjChoiceType.CPF,
+                    ItemElementName = cnpj.Length > 11 ? TipoPessoa.CNPJ : TipoPessoa.CPF,
                     CpjCnpj = cnpj,
                     Item1 = dados,
                     versao = TVerDistDFe.Item101,
@@ -164,7 +183,6 @@ namespace Sefaz.Core
                 Schema = doc.schema,
                 Xml = doc.Decompress()
             };
-
         }
 
         /// <summary>
@@ -222,8 +240,181 @@ namespace Sefaz.Core
         }
 
         /// <summary>
+        /// Gera um evento de manifesto do destinatário
+        /// </summary>
+        /// <param name="cnpj">CNPJ do destinatário</param>
+        /// <param name="chave">Chave da NFe</param>
+        /// <param name="evento">Tipo de evento</param>
+        /// <param name="sequencia">Número sequencial usado para identificar a ordem que os eventos ocorreram</param>
+        /// <param name="justificativa">Justificativa caso necessária</param>
+        /// <exception cref="SefazException">Pode lançar uma exceção caso o cStat tenha algum valor inesperado</exception>
+        /// <remarks>O schema (xsd) não está sendo validado antes do envio</remarks>
+        public async Task ManifestarNFe(string cnpj, string chave, TEventoInfEventoDetEventoDescEvento evento, int sequencia = 1, string justificativa = null)
+        {
+
+            if (DateTime.UtcNow > _Certificado.NotAfter) throw new Exception($"O certificado venceu em {_Certificado.NotAfter}!");
+            if (DateTime.UtcNow < _Certificado.NotBefore) throw new Exception("O certificado ainda não é válido!");
+
+            // Configuração do ws
+            var endpoint = new System.ServiceModel.EndpointAddress(_EndPointNFeRecepcaoEvento);
+            var binding = new System.ServiceModel.BasicHttpBinding(System.ServiceModel.BasicHttpSecurityMode.Transport) { MaxReceivedMessageSize = 999999999 };
+            binding.Security.Transport.ClientCredentialType = System.ServiceModel.HttpClientCredentialType.Certificate;
+
+            // Instância do cliente
+            var ws = new NFeRecepcaoEvento4SoapClient(binding, endpoint);
+            
+            // Definição do certificado
+            ws.ClientCredentials.ClientCertificate.Certificate = _Certificado;
+
+            // Dados
+            TEventoInfEventoTpEvento tpEvento;
+            string id;
+            string nSeqEvento;
+            switch (evento)
+            {
+                case TEventoInfEventoDetEventoDescEvento.CienciaDaOperacao:
+                    tpEvento = TEventoInfEventoTpEvento.CienciaDaEmissao;
+                    nSeqEvento = "1"; // FIXO "1"
+                    id = "ID" + "210210" + chave + nSeqEvento.PadLeft(2, '0'); // "ID" + tpEvento + chave da NF-e + nSeqEvento 
+                    break;
+                case TEventoInfEventoDetEventoDescEvento.ConfirmacaoDaOperacao:
+                    tpEvento = TEventoInfEventoTpEvento.ConfirmacaoDaOperacao;
+                    nSeqEvento = sequencia.ToString();
+                    id = "ID" + "210200" + chave + nSeqEvento.PadLeft(2, '0');
+                    break;
+                case TEventoInfEventoDetEventoDescEvento.DesconhecimentoDaOperacao:
+                    tpEvento = TEventoInfEventoTpEvento.DesconhecimentoDaOperacao;
+                    nSeqEvento = sequencia.ToString();
+                    id = "ID" + "210220" + chave + nSeqEvento.PadLeft(2, '0');
+                    break;
+                case TEventoInfEventoDetEventoDescEvento.OperacaoNaoRealizada:
+                    tpEvento = TEventoInfEventoTpEvento.OperacaoNaoRealizada;
+                    nSeqEvento = sequencia.ToString();
+                    id = "ID" + "210240" + chave + nSeqEvento.PadLeft(2, '0');
+                    break;
+                default:
+                    throw new NotImplementedException("Tipo de evento não suportado!");
+            }
+            var dados = new TEnvEvento
+            {
+                versao = "1.00",
+                idLote = 1.ToString("000000000000000"),
+                evento = new[]{
+                    new TEvento {
+                        versao = "1.00", // Versão do layout do evento
+                        infEvento = new TEventoInfEvento {
+                            Id = id, // Identificador da TAG a ser assinada, a regra de formação do Id é: “ID” + tpEvento + chave da NF-e + nSeqEvento 
+                            cOrgao = OrgaoManifesto, // Código do órgão de recepção do Evento. Utilizar a Tabela de UF do IBGE, utilizar 91 para identificar o Ambiente Nacional.
+                            tpAmb = _Ambiente,
+                            Item = cnpj,
+                            ItemElementName = cnpj.Length > 11 ? TipoPessoa.CNPJ : TipoPessoa.CPF,
+                            chNFe = chave,
+                            dhEvento = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:sszzz"),
+                            tpEvento = tpEvento,
+                            nSeqEvento = nSeqEvento,
+                            verEvento = "1.00", // Identificação da Versão do evento informado em detEvento
+                            detEvento = new TEventoInfEventoDetEvento
+                            {
+                                versao = TEventoInfEventoDetEventoVersao.Item100,
+                                descEvento = evento,
+                                xJust = justificativa
+                            }
+                        }
+                        //Signature = null // Assinatura Digital do documento XML, a assinatura deverá ser aplicada no elemento infEvento
+                    }
+                }
+            };
+
+            // Corpo
+            var corpo = new XmlDocument();
+            using var memoryStream = new MemoryStream();
+            var streamWriter = new StreamWriter(memoryStream);
+            XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+            ns.Add("", "http://www.portalfiscal.inf.br/nfe");
+            new XmlSerializer(typeof(TEnvEvento)).Serialize(streamWriter, dados, ns);
+            corpo.LoadXml(Encoding.UTF8.GetString(memoryStream.ToArray()));
+            
+            //Assinar(ref corpo);
+            corpo = AssinarXML(corpo, _Certificado, "infEvento");
+
+            // Chama o web service
+            var resposta = await ws.nfeRecepcaoEventoNFAsync(corpo);
+
+            // Trabalha com a resposta
+            var retorno = resposta.nfeRecepcaoEventoNFResult.DeserializeTo<TRetEnvEvento>();
+            if (retorno.cStat != "128") throw new SefazException(retorno.cStat, retorno.xMotivo);
+            var infEvento = retorno.retEvento[0].infEvento;
+            if (infEvento.cStat != "135") throw new SefazException(infEvento.cStat, infEvento.xMotivo);
+
+        }
+
+        /// <summary>
+        /// Método responsável por assinar documentos XML. A assinatura é realizada utilizando os padrões
+        /// estabelecidos para a Nota Fiscal Eletrônica.
+        /// Somente é assinada a primeira TAG com seu atributo encontrada no documento XML.
+        /// </summary>
+        /// <param name="documentoXML">Documento XML a ser assinado</param>
+        /// <param name="certificadoX509">Certificado Digital X.509 com chave privada</param>
+        /// <param name="tagAAssinar">TAG do documento XML a ser assinada</param>
+        /// <param name="idAtributoTag">Atributo que identifica a TAG a ser assinada</param>
+        /// <returns>Documento XML assinado</returns>
+        public XmlDocument AssinarXML(XmlDocument documentoXML, X509Certificate2 certificadoX509, string tagAAssinar, string idAtributoTag = "Id")
+        {
+            string signatureMethod = @"http://www.w3.org/2000/09/xmldsig#rsa-sha1";
+            string digestMethod = @"http://www.w3.org/2000/09/xmldsig#sha1";
+
+            if (documentoXML == null) throw new ArgumentNullException(nameof(documentoXML));
+            if (certificadoX509 == null) throw new ArgumentNullException(nameof(certificadoX509));
+            if (!certificadoX509.HasPrivateKey) throw new ArgumentException("Certificado Digital informado não possui chave privada.", nameof(certificadoX509));
+            if (string.IsNullOrWhiteSpace(tagAAssinar)) throw new ArgumentException("String que informa a tag XML a ser assinada está vazia,", nameof(tagAAssinar));
+            if (string.IsNullOrWhiteSpace(idAtributoTag)) throw new ArgumentException("String que informa o id da tag XML a ser assinada está vazia", nameof(idAtributoTag));
+
+            try
+            {
+                // Informando qual a tag será assinada
+                var nodeParaAssinatura = documentoXML.GetElementsByTagName(tagAAssinar);
+                var signedXml = new SignedXml((XmlElement)nodeParaAssinatura[0]);
+                signedXml.SignedInfo.SignatureMethod = signatureMethod;
+
+                // Adicionando a chave privada para assinar o documento
+                signedXml.SigningKey = certificadoX509.PrivateKey;
+
+                // Referenciando o identificador da tag que será assinada
+                var reference = new Reference("#" + nodeParaAssinatura[0].Attributes[idAtributoTag].Value);
+                reference.AddTransform(new XmlDsigEnvelopedSignatureTransform(false));
+                reference.AddTransform(new XmlDsigC14NTransform(false));
+                reference.DigestMethod = digestMethod;
+
+                // Adicionando a referencia de qual tag será assinada
+                signedXml.AddReference(reference);
+
+                // Adicionando informações do certificado na assinatura
+                var keyInfo = new KeyInfo();
+                keyInfo.AddClause(new KeyInfoX509Data(certificadoX509));
+                signedXml.KeyInfo = keyInfo;
+
+                // Calculando a assinatura
+                signedXml.ComputeSignature();
+
+                // Adicionando a tag de assinatura ao documento xml
+                var sig = signedXml.GetXml();
+                documentoXML.GetElementsByTagName(tagAAssinar)[0].ParentNode.AppendChild(sig);
+
+                var xmlAssinado = new XmlDocument();
+                xmlAssinado.PreserveWhitespace = true;
+                xmlAssinado.LoadXml(documentoXML.OuterXml);
+                return xmlAssinado;
+            }
+            catch (Exception ex)
+            {
+                // Falha ao assinar documento XML
+                throw new Exception("Falha ao assinar documento XML.", ex);
+            }
+        }
+
+        /// <summary>
         /// Libera recursos
         /// </summary>
-        public void Dispose() => Certificado?.Dispose();
+        public void Dispose() => _Certificado?.Dispose();
     }
 }

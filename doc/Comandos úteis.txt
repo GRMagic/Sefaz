@@ -1,3 +1,8 @@
 Gerar classes usando xsd
 
 xsd distDFeInt_v1.01.xsd retDistDFeInt_v1.01.xsd /c /n:Sefaz.Core.Meta.NFeDistDFe
+
+xsd xmldsig-core-schema_v1.01.xsd /c /n:Meta.EventoManifestaDest
+xsd e210210_v1.00.xsd /c /n:Meta.EventoManifestaDest
+xsd /c /n:Meta.EventoManifestaDest /t:evento confRecebto_v1.00.xsd xmldsig-core-schema_v1.01.xsd
+xsd /c /n:Meta.EventoManifestaDest retEnvConfRecebto_v1.00.xsd xmldsig-core-schema_v1.01.xsd

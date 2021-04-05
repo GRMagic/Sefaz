@@ -7,54 +7,35 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Sefaz.WCF
+namespace Sefaz.WCF.NFeRecepcaoEvento4
 {
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace="http://www.portalfiscal.inf.br/nfe/wsdl/NFeDistribuicaoDFe", ConfigurationName="Sefaz.WCF.NFeDistribuicaoDFeSoap")]
-    internal interface NFeDistribuicaoDFeSoap
+    [System.ServiceModel.ServiceContractAttribute(Namespace="http://www.portalfiscal.inf.br/nfe/wsdl/NFeRecepcaoEvento4", ConfigurationName="Sefaz.WCF.NFeRecepcaoEvento4.NFeRecepcaoEvento4Soap")]
+    internal interface NFeRecepcaoEvento4Soap
     {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://www.portalfiscal.inf.br/nfe/wsdl/NFeDistribuicaoDFe/nfeDistDFeInteresse", ReplyAction="*")]
-        System.Threading.Tasks.Task<Sefaz.WCF.nfeDistDFeInteresseResponse> nfeDistDFeInteresseAsync(Sefaz.WCF.nfeDistDFeInteresseRequest request);
+        [System.ServiceModel.OperationContractAttribute(Action="http://www.portalfiscal.inf.br/nfe/wsdl/NFeRecepcaoEvento4/nfeRecepcaoEventoNF", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        System.Threading.Tasks.Task<Sefaz.WCF.NFeRecepcaoEvento4.nfeRecepcaoEventoNFResponse> nfeRecepcaoEventoNFAsync(Sefaz.WCF.NFeRecepcaoEvento4.nfeRecepcaoEventoNFRequest request);
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    internal partial class nfeDistDFeInteresseRequest
+    internal partial class nfeRecepcaoEventoNFRequest
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="nfeDistDFeInteresse", Namespace="http://www.portalfiscal.inf.br/nfe/wsdl/NFeDistribuicaoDFe", Order=0)]
-        public Sefaz.WCF.nfeDistDFeInteresseRequestBody Body;
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://www.portalfiscal.inf.br/nfe/wsdl/NFeRecepcaoEvento4", Order=0)]
+        public System.Xml.XmlNode nfeDadosMsg;
         
-        public nfeDistDFeInteresseRequest()
+        public nfeRecepcaoEventoNFRequest()
         {
         }
         
-        public nfeDistDFeInteresseRequest(Sefaz.WCF.nfeDistDFeInteresseRequestBody Body)
-        {
-            this.Body = Body;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://www.portalfiscal.inf.br/nfe/wsdl/NFeDistribuicaoDFe")]
-    internal partial class nfeDistDFeInteresseRequestBody
-    {
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
-        public System.Xml.XmlElement nfeDadosMsg;
-        
-        public nfeDistDFeInteresseRequestBody()
-        {
-        }
-        
-        public nfeDistDFeInteresseRequestBody(System.Xml.XmlElement nfeDadosMsg)
+        public nfeRecepcaoEventoNFRequest(System.Xml.XmlNode nfeDadosMsg)
         {
             this.nfeDadosMsg = nfeDadosMsg;
         }
@@ -64,50 +45,30 @@ namespace Sefaz.WCF
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    internal partial class nfeDistDFeInteresseResponse
+    internal partial class nfeRecepcaoEventoNFResponse
     {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="nfeDistDFeInteresseResponse", Namespace="http://www.portalfiscal.inf.br/nfe/wsdl/NFeDistribuicaoDFe", Order=0)]
-        public Sefaz.WCF.nfeDistDFeInteresseResponseBody Body;
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://www.portalfiscal.inf.br/nfe/wsdl/NFeRecepcaoEvento4", Order=0)]
+        public System.Xml.XmlNode nfeRecepcaoEventoNFResult;
         
-        public nfeDistDFeInteresseResponse()
+        public nfeRecepcaoEventoNFResponse()
         {
         }
         
-        public nfeDistDFeInteresseResponse(Sefaz.WCF.nfeDistDFeInteresseResponseBody Body)
+        public nfeRecepcaoEventoNFResponse(System.Xml.XmlNode nfeRecepcaoEventoNFResult)
         {
-            this.Body = Body;
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-    [System.Runtime.Serialization.DataContractAttribute(Namespace="http://www.portalfiscal.inf.br/nfe/wsdl/NFeDistribuicaoDFe")]
-    internal partial class nfeDistDFeInteresseResponseBody
-    {
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
-        public System.Xml.XmlElement nfeDistDFeInteresseResult;
-        
-        public nfeDistDFeInteresseResponseBody()
-        {
-        }
-        
-        public nfeDistDFeInteresseResponseBody(System.Xml.XmlElement nfeDistDFeInteresseResult)
-        {
-            this.nfeDistDFeInteresseResult = nfeDistDFeInteresseResult;
+            this.nfeRecepcaoEventoNFResult = nfeRecepcaoEventoNFResult;
         }
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    internal interface NFeDistribuicaoDFeSoapChannel : Sefaz.WCF.NFeDistribuicaoDFeSoap, System.ServiceModel.IClientChannel
+    internal interface NFeRecepcaoEvento4SoapChannel : Sefaz.WCF.NFeRecepcaoEvento4.NFeRecepcaoEvento4Soap, System.ServiceModel.IClientChannel
     {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
-    internal partial class NFeDistribuicaoDFeSoapClient : System.ServiceModel.ClientBase<Sefaz.WCF.NFeDistribuicaoDFeSoap>, Sefaz.WCF.NFeDistribuicaoDFeSoap
+    internal partial class NFeRecepcaoEvento4SoapClient : System.ServiceModel.ClientBase<Sefaz.WCF.NFeRecepcaoEvento4.NFeRecepcaoEvento4Soap>, Sefaz.WCF.NFeRecepcaoEvento4.NFeRecepcaoEvento4Soap
     {
         
         /// <summary>
@@ -117,44 +78,43 @@ namespace Sefaz.WCF
         /// <param name="clientCredentials">The client credentials</param>
         static partial void ConfigureEndpoint(System.ServiceModel.Description.ServiceEndpoint serviceEndpoint, System.ServiceModel.Description.ClientCredentials clientCredentials);
         
-        public NFeDistribuicaoDFeSoapClient(EndpointConfiguration endpointConfiguration) : 
-                base(NFeDistribuicaoDFeSoapClient.GetBindingForEndpoint(endpointConfiguration), NFeDistribuicaoDFeSoapClient.GetEndpointAddress(endpointConfiguration))
+        public NFeRecepcaoEvento4SoapClient(EndpointConfiguration endpointConfiguration) : 
+                base(NFeRecepcaoEvento4SoapClient.GetBindingForEndpoint(endpointConfiguration), NFeRecepcaoEvento4SoapClient.GetEndpointAddress(endpointConfiguration))
         {
             this.Endpoint.Name = endpointConfiguration.ToString();
             ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
         }
         
-        public NFeDistribuicaoDFeSoapClient(EndpointConfiguration endpointConfiguration, string remoteAddress) : 
-                base(NFeDistribuicaoDFeSoapClient.GetBindingForEndpoint(endpointConfiguration), new System.ServiceModel.EndpointAddress(remoteAddress))
+        public NFeRecepcaoEvento4SoapClient(EndpointConfiguration endpointConfiguration, string remoteAddress) : 
+                base(NFeRecepcaoEvento4SoapClient.GetBindingForEndpoint(endpointConfiguration), new System.ServiceModel.EndpointAddress(remoteAddress))
         {
             this.Endpoint.Name = endpointConfiguration.ToString();
             ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
         }
         
-        public NFeDistribuicaoDFeSoapClient(EndpointConfiguration endpointConfiguration, System.ServiceModel.EndpointAddress remoteAddress) : 
-                base(NFeDistribuicaoDFeSoapClient.GetBindingForEndpoint(endpointConfiguration), remoteAddress)
+        public NFeRecepcaoEvento4SoapClient(EndpointConfiguration endpointConfiguration, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(NFeRecepcaoEvento4SoapClient.GetBindingForEndpoint(endpointConfiguration), remoteAddress)
         {
             this.Endpoint.Name = endpointConfiguration.ToString();
             ConfigureEndpoint(this.Endpoint, this.ClientCredentials);
         }
         
-        public NFeDistribuicaoDFeSoapClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public NFeRecepcaoEvento4SoapClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress)
         {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<Sefaz.WCF.nfeDistDFeInteresseResponse> Sefaz.WCF.NFeDistribuicaoDFeSoap.nfeDistDFeInteresseAsync(Sefaz.WCF.nfeDistDFeInteresseRequest request)
+        System.Threading.Tasks.Task<Sefaz.WCF.NFeRecepcaoEvento4.nfeRecepcaoEventoNFResponse> Sefaz.WCF.NFeRecepcaoEvento4.NFeRecepcaoEvento4Soap.nfeRecepcaoEventoNFAsync(Sefaz.WCF.NFeRecepcaoEvento4.nfeRecepcaoEventoNFRequest request)
         {
-            return base.Channel.nfeDistDFeInteresseAsync(request);
+            return base.Channel.nfeRecepcaoEventoNFAsync(request);
         }
         
-        public System.Threading.Tasks.Task<Sefaz.WCF.nfeDistDFeInteresseResponse> nfeDistDFeInteresseAsync(System.Xml.XmlElement nfeDadosMsg)
+        public System.Threading.Tasks.Task<Sefaz.WCF.NFeRecepcaoEvento4.nfeRecepcaoEventoNFResponse> nfeRecepcaoEventoNFAsync(System.Xml.XmlNode nfeDadosMsg)
         {
-            Sefaz.WCF.nfeDistDFeInteresseRequest inValue = new Sefaz.WCF.nfeDistDFeInteresseRequest();
-            inValue.Body = new Sefaz.WCF.nfeDistDFeInteresseRequestBody();
-            inValue.Body.nfeDadosMsg = nfeDadosMsg;
-            return ((Sefaz.WCF.NFeDistribuicaoDFeSoap)(this)).nfeDistDFeInteresseAsync(inValue);
+            Sefaz.WCF.NFeRecepcaoEvento4.nfeRecepcaoEventoNFRequest inValue = new Sefaz.WCF.NFeRecepcaoEvento4.nfeRecepcaoEventoNFRequest();
+            inValue.nfeDadosMsg = nfeDadosMsg;
+            return ((Sefaz.WCF.NFeRecepcaoEvento4.NFeRecepcaoEvento4Soap)(this)).nfeRecepcaoEventoNFAsync(inValue);
         }
         
         public virtual System.Threading.Tasks.Task OpenAsync()
@@ -169,7 +129,7 @@ namespace Sefaz.WCF
         
         private static System.ServiceModel.Channels.Binding GetBindingForEndpoint(EndpointConfiguration endpointConfiguration)
         {
-            if ((endpointConfiguration == EndpointConfiguration.NFeDistribuicaoDFeSoap))
+            if ((endpointConfiguration == EndpointConfiguration.NFeRecepcaoEvento4Soap))
             {
                 System.ServiceModel.BasicHttpBinding result = new System.ServiceModel.BasicHttpBinding();
                 result.MaxBufferSize = int.MaxValue;
@@ -179,7 +139,7 @@ namespace Sefaz.WCF
                 result.Security.Mode = System.ServiceModel.BasicHttpSecurityMode.Transport;
                 return result;
             }
-            if ((endpointConfiguration == EndpointConfiguration.NFeDistribuicaoDFeSoap12))
+            if ((endpointConfiguration == EndpointConfiguration.NFeRecepcaoEvento4Soap12))
             {
                 System.ServiceModel.Channels.CustomBinding result = new System.ServiceModel.Channels.CustomBinding();
                 System.ServiceModel.Channels.TextMessageEncodingBindingElement textBindingElement = new System.ServiceModel.Channels.TextMessageEncodingBindingElement();
@@ -197,13 +157,13 @@ namespace Sefaz.WCF
         
         private static System.ServiceModel.EndpointAddress GetEndpointAddress(EndpointConfiguration endpointConfiguration)
         {
-            if ((endpointConfiguration == EndpointConfiguration.NFeDistribuicaoDFeSoap))
+            if ((endpointConfiguration == EndpointConfiguration.NFeRecepcaoEvento4Soap))
             {
-                return new System.ServiceModel.EndpointAddress("https://www1.nfe.fazenda.gov.br/NFeDistribuicaoDFe/NFeDistribuicaoDFe.asmx");
+                return new System.ServiceModel.EndpointAddress("https://www.nfe.fazenda.gov.br/NFeRecepcaoEvento4/NFeRecepcaoEvento4.asmx");
             }
-            if ((endpointConfiguration == EndpointConfiguration.NFeDistribuicaoDFeSoap12))
+            if ((endpointConfiguration == EndpointConfiguration.NFeRecepcaoEvento4Soap12))
             {
-                return new System.ServiceModel.EndpointAddress("https://www1.nfe.fazenda.gov.br/NFeDistribuicaoDFe/NFeDistribuicaoDFe.asmx");
+                return new System.ServiceModel.EndpointAddress("https://www.nfe.fazenda.gov.br/NFeRecepcaoEvento4/NFeRecepcaoEvento4.asmx");
             }
             throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
         }
@@ -211,9 +171,9 @@ namespace Sefaz.WCF
         public enum EndpointConfiguration
         {
             
-            NFeDistribuicaoDFeSoap,
+            NFeRecepcaoEvento4Soap,
             
-            NFeDistribuicaoDFeSoap12,
+            NFeRecepcaoEvento4Soap12,
         }
     }
 }
