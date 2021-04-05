@@ -17,10 +17,15 @@ namespace Sefaz.Exemplo
             // Criando uma instância para uso em PRODUÇÃO
             using var sefaz = new Sefaz.Core.Sefaz(caminhoCertificado, senhaCertificado);
 
-            // -------------- Baixar uma NFe pela Chave --------------
-
-            // Chave da nota que vamos baixar. A nota precisa ter pelo menos manifesto de ciência da emissão.
+            // Chave da nota que vamos baixar
             var chaveNFe = "12345678901234567890123456789012345678901234";
+
+            // -------------- Manifestar ciência da emissão por parte do destinatário --------------
+
+            await sefaz.ManifestarNFe(cnpj, chaveNFe, Core.Meta.TEventoInfEventoDetEventoDescEvento.CienciaDaOperacao);
+            // OBS.: É comum a SEFAZ demorar alguns segundos para liberar a NFe para download
+
+            // -------------- Baixar uma NFe pela Chave --------------
 
             // Local onde vamos salvar a nota
             var pasta = @"D:\Temp\";
