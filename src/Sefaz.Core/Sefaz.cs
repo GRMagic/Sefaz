@@ -150,7 +150,7 @@ namespace Sefaz.Core
 
             try
             {
-                var nota = retorno.loteDistDFeInt.docZip.Where(d => d.schema.StartsWith("procNFe_")).FirstOrDefault();
+                var nota = retorno.loteDistDFeInt.docZip.FirstOrDefault(d => d.schema.StartsWith("procNFe_"));
                 return new Documento
                 {
                     NSU = long.Parse(nota.NSU),
@@ -187,6 +187,8 @@ namespace Sefaz.Core
 
             // Chamada
             var retorno = await ChamarWsNFe(cUF, cnpj, dados);
+
+            if (retorno.cStat != "138") throw new SefazException(retorno.cStat, retorno.xMotivo);
 
             var doc = retorno.loteDistDFeInt.docZip.First();
 
