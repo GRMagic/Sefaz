@@ -46,11 +46,5 @@ namespace Sefaz.Core.Test
 
             Assert.Equal("chave", ex.ParamName);
         }
-
-        [Fact]
-        public void FeitoParaDarErro()
-        {
-            Assert.NotNull(null);
-        }
     }
 }
