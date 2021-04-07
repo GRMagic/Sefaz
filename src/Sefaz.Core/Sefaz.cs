@@ -132,6 +132,12 @@ namespace Sefaz.Core
         /// <returns>Documento retornado pela SEFAZ</returns>
         public async Task<Documento> BaixarNFe(string cUF, string cnpj, string chave)
         {
+            if (string.IsNullOrWhiteSpace(cUF)) throw new ArgumentNullException(nameof(cUF));
+            if (cUF.Length != 2) throw new ArgumentException("O código da UF deve ter dois algarismos.", nameof(cUF));
+            if (string.IsNullOrWhiteSpace(cnpj)) throw new ArgumentNullException(nameof(cnpj));
+            if (cnpj.Length != 14) throw new ArgumentException("O CNPJ deve ter 14 algarismos.", nameof(cnpj));
+            if (string.IsNullOrWhiteSpace(chave)) throw new ArgumentNullException(nameof(chave));
+            if (chave.Length != 44) throw new ArgumentException("A chave deve ter 44 algarismos.", nameof(chave));
 
             // Dados
             var dados = new distDFeIntConsChNFe
@@ -166,6 +172,13 @@ namespace Sefaz.Core
         /// <returns>Documento retornado pela SEFAZ, não necessariamente uma NFe, pode ser algum evento por exemplo</returns>
         public async Task<Documento> ConsultarNFeNSU(string cUF, string cnpj, long nsu)
         {
+
+            if (string.IsNullOrWhiteSpace(cUF)) throw new ArgumentNullException(nameof(cUF));
+            if (cUF.Length != 2) throw new ArgumentException("O código da UF deve ter dois algarismos.", nameof(cUF));
+            if (string.IsNullOrWhiteSpace(cnpj)) throw new ArgumentNullException(nameof(cnpj));
+            if (cnpj.Length != 14) throw new ArgumentException("O CNPJ deve ter 14 algarismos.", nameof(cnpj));
+            if (nsu < 0) throw new ArgumentException("O NSU deve ser um número positivo.", nameof(nsu));
+
             // Dados
             var dados = new distDFeIntConsNSU
             {
@@ -196,6 +209,12 @@ namespace Sefaz.Core
         /// <remarks>ATENÇÃO! Consultas grandes e frequentes podem causar bloqueio temporário do serviço. Evite usar ultNSU=0 mais de uma vez por hora.</remarks>
         public async Task<ListaDocumentos> ConsultarNFeCNPJ(string cUF, string cnpj, long ultimoNSU = 0, bool todosLotes = true)
         {
+            if (string.IsNullOrWhiteSpace(cUF)) throw new ArgumentNullException(nameof(cUF));
+            if (cUF.Length != 2) throw new ArgumentException("O código da UF deve ter dois algarismos.", nameof(cUF));
+            if (string.IsNullOrWhiteSpace(cnpj)) throw new ArgumentNullException(nameof(cnpj));
+            if (cnpj.Length != 14) throw new ArgumentException("O CNPJ deve ter 14 algarismos.", nameof(cnpj));
+            if (ultimoNSU < 0) throw new ArgumentException("O NSU deve ser um número positivo.", nameof(ultimoNSU));
+
             var lista = new ListaDocumentos();
             lista.UltimoNSU = ultimoNSU;
 
@@ -251,7 +270,10 @@ namespace Sefaz.Core
         /// <remarks>O schema (xsd) não está sendo validado antes do envio</remarks>
         public async Task ManifestarNFe(string cnpj, string chave, TEventoInfEventoDetEventoDescEvento evento, int sequencia = 1, string justificativa = null)
         {
-
+            if (string.IsNullOrWhiteSpace(cnpj)) throw new ArgumentNullException(nameof(cnpj));
+            if (cnpj.Length != 14) throw new ArgumentException("O CNPJ deve ter 14 algarismos.", nameof(cnpj));
+            if (string.IsNullOrWhiteSpace(chave)) throw new ArgumentNullException(nameof(chave));
+            if (chave.Length != 44) throw new ArgumentException("A chave deve ter 44 algarismos.", nameof(chave));
             if (DateTime.UtcNow > _Certificado.NotAfter) throw new Exception($"O certificado venceu em {_Certificado.NotAfter}!");
             if (DateTime.UtcNow < _Certificado.NotBefore) throw new Exception("O certificado ainda não é válido!");
 
