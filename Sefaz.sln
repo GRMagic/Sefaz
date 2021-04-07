@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sefaz.Core", "src\Sefaz.Core\Sefaz.Core.csproj", "{D7A8098B-05CB-4818-9C09-B6B43A803CE4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sefaz.Exemplo", "src\Sefaz.Exemplo\Sefaz.Exemplo.csproj", "{2388E166-81F8-49E0-A319-F7C65D5D492B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sefaz.Exemplo", "src\Sefaz.Exemplo\Sefaz.Exemplo.csproj", "{2388E166-81F8-49E0-A319-F7C65D5D492B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sefaz.Core.Test", "test\Sefaz.Core.Test\Sefaz.Core.Test.csproj", "{AFF83989-7704-43F5-8004-E0F051942330}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{2388E166-81F8-49E0-A319-F7C65D5D492B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2388E166-81F8-49E0-A319-F7C65D5D492B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2388E166-81F8-49E0-A319-F7C65D5D492B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFF83989-7704-43F5-8004-E0F051942330}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFF83989-7704-43F5-8004-E0F051942330}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFF83989-7704-43F5-8004-E0F051942330}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFF83989-7704-43F5-8004-E0F051942330}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

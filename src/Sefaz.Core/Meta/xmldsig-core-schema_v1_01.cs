@@ -142,7 +142,8 @@ namespace Sefaz.Core.Meta
     public partial class SignedInfoTypeCanonicalizationMethod {
         
         private string algorithmField;
-        
+
+        /// <remarks/>
         public SignedInfoTypeCanonicalizationMethod() {
             this.algorithmField = "http://www.w3.org/TR/2001/REC-xml-c14n-20010315";
         }
@@ -395,7 +396,8 @@ namespace Sefaz.Core.Meta
     public partial class ReferenceTypeDigestMethod {
         
         private string algorithmField;
-        
+
+        /// <remarks/>
         public ReferenceTypeDigestMethod() {
             this.algorithmField = "http://www.w3.org/2000/09/xmldsig#sha1";
         }
@@ -421,7 +423,8 @@ namespace Sefaz.Core.Meta
     public partial class SignedInfoTypeSignatureMethod {
         
         private string algorithmField;
-        
+
+        /// <remarks/>
         public SignedInfoTypeSignatureMethod() {
             this.algorithmField = "http://www.w3.org/2000/09/xmldsig#rsa-sha1";
         }
