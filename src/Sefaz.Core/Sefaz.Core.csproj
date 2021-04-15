@@ -5,7 +5,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     
     <PackageId>rmdev.sefaz</PackageId>
-    <Version>1.1.1</Version>
+    <Version>1.1.2</Version>
     <License>MIT</License>
     <Authors>Gustavo Rossi Müller</Authors>
     <PackageDescription>Biblioteca para auxiliar no download de notas fiscais</PackageDescription>

@@ -20,8 +20,8 @@ jobs:
     - name: Contruir e Criar Pacote
       run: dotnet build --configuration Release
 
-#    - name: Testar
-#      run: dotnet test
+    - name: Testar
+      run: dotnet test
     
     - name: Publicar
       run: dotnet nuget push ./src/Sefaz.Core/bin/Release/*.nupkg -k ${{ secrets.NUGET_TOKEN }} -s https://api.nuget.org/v3/index.json
