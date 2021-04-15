@@ -11,14 +11,14 @@ namespace Sefaz.Core.Test
         public void ConstruirClasse()
         {
             // Act
-            new Sefaz("cert.pfx", "123456", Meta.TAmb.Homologacao).Dispose();
+            new Sefaz("test.pfx", "123456", Meta.TAmb.Homologacao).Dispose();
         }
 
         [Fact(DisplayName = "Formato da UF incorreto")]
         [Trait("Categoria", "BaixarNFe")]
         public async Task FormatoUFIncorreto()
         {
-            using var sefaz = new Sefaz("cert.pfx", "123456", Meta.TAmb.Homologacao);
+            using var sefaz = new Sefaz("test.pfx", "123456", Meta.TAmb.Homologacao);
 
             var ex = await Assert.ThrowsAsync<ArgumentException>(() => sefaz.BaixarNFe("4", "12345678901234", "12345678901234567890123456789012345678901234"));
 
@@ -29,7 +29,7 @@ namespace Sefaz.Core.Test
         [Trait("Categoria", "BaixarNFe")]
         public async Task FormatoCNPJIncorreto()
         {
-            using var sefaz = new Sefaz("cert.pfx", "123456", Meta.TAmb.Homologacao);
+            using var sefaz = new Sefaz("test.pfx", "123456", Meta.TAmb.Homologacao);
 
             var ex = await Assert.ThrowsAsync<ArgumentException>(() => sefaz.BaixarNFe("12", "123", "12345678901234567890123456789012345678901234"));
 
@@ -40,7 +40,7 @@ namespace Sefaz.Core.Test
         [Trait("Categoria", "BaixarNFe")]
         public async Task FormatoChaveIncorreto()
         {
-            using var sefaz = new Sefaz("cert.pfx", "123456", Meta.TAmb.Homologacao);
+            using var sefaz = new Sefaz("test.pfx", "123456", Meta.TAmb.Homologacao);
 
             var ex = await Assert.ThrowsAsync<ArgumentException>(() => sefaz.BaixarNFe("12", "12345678901234", "123"));
 
