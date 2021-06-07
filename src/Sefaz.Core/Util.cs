@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
+using System.Security.Cryptography.Xml;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -183,5 +186,70 @@ namespace Sefaz.Core
             info["dv"] = chNFe.Substring(i, 1); i += 1;
             return info;
         }
+
+        /// <summary>
+        /// Método responsável por assinar documentos XML. A assinatura é realizada utilizando os padrões
+        /// estabelecidos para a Nota Fiscal Eletrônica.
+        /// Somente é assinada a primeira TAG com seu atributo encontrada no documento XML.
+        /// </summary>
+        /// <param name="documentoXML">Documento XML a ser assinado</param>
+        /// <param name="certificadoX509">Certificado Digital X.509 com chave privada</param>
+        /// <param name="tagAAssinar">TAG do documento XML a ser assinada</param>
+        /// <param name="idAtributoTag">Atributo que identifica a TAG a ser assinada</param>
+        /// <returns>Documento XML assinado</returns>
+        public static XmlDocument AssinarXML(XmlDocument documentoXML, X509Certificate2 certificadoX509, string tagAAssinar, string idAtributoTag = "Id")
+        {
+            string signatureMethod = @"http://www.w3.org/2000/09/xmldsig#rsa-sha1";
+            string digestMethod = @"http://www.w3.org/2000/09/xmldsig#sha1";
+
+            if (documentoXML == null) throw new ArgumentNullException(nameof(documentoXML));
+            if (certificadoX509 == null) throw new ArgumentNullException(nameof(certificadoX509));
+            if (!certificadoX509.HasPrivateKey) throw new ArgumentException("Certificado Digital informado não possui chave privada.", nameof(certificadoX509));
+            if (string.IsNullOrWhiteSpace(tagAAssinar)) throw new ArgumentException("String que informa a tag XML a ser assinada está vazia,", nameof(tagAAssinar));
+            if (string.IsNullOrWhiteSpace(idAtributoTag)) throw new ArgumentException("String que informa o id da tag XML a ser assinada está vazia", nameof(idAtributoTag));
+
+            try
+            {
+                // Informando qual a tag será assinada
+                var nodeParaAssinatura = documentoXML.GetElementsByTagName(tagAAssinar);
+                var signedXml = new SignedXml((XmlElement)nodeParaAssinatura[0]);
+                signedXml.SignedInfo.SignatureMethod = signatureMethod;
+
+                // Adicionando a chave privada para assinar o documento
+                signedXml.SigningKey = certificadoX509.PrivateKey;
+
+                // Referenciando o identificador da tag que será assinada
+                var reference = new Reference("#" + nodeParaAssinatura[0].Attributes[idAtributoTag].Value);
+                reference.AddTransform(new XmlDsigEnvelopedSignatureTransform(false));
+                reference.AddTransform(new XmlDsigC14NTransform(false));
+                reference.DigestMethod = digestMethod;
+
+                // Adicionando a referência de qual tag será assinada
+                signedXml.AddReference(reference);
+
+                // Adicionando informações do certificado na assinatura
+                var keyInfo = new KeyInfo();
+                keyInfo.AddClause(new KeyInfoX509Data(certificadoX509));
+                signedXml.KeyInfo = keyInfo;
+
+                // Calculando a assinatura
+                signedXml.ComputeSignature();
+
+                // Adicionando a tag de assinatura ao documento xml
+                var sig = signedXml.GetXml();
+                documentoXML.GetElementsByTagName(tagAAssinar)[0].ParentNode.AppendChild(sig);
+
+                var xmlAssinado = new XmlDocument();
+                xmlAssinado.PreserveWhitespace = true;
+                xmlAssinado.LoadXml(documentoXML.OuterXml);
+                return xmlAssinado;
+            }
+            catch (Exception ex)
+            {
+                // Falha ao assinar documento XML
+                throw new Exception("Falha ao assinar documento XML.", ex);
+            }
+        }
+
     }
 }
