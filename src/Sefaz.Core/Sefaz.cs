@@ -18,10 +18,15 @@ namespace Sefaz.Core
     /// </summary>
     public class Sefaz : ISefaz
     {
+        private const string ENDPOINTNFEDISTRIBUICAODFE = "https://www1.nfe.fazenda.gov.br/NFeDistribuicaoDFe/NFeDistribuicaoDFe.asmx";
+        private const string ENDPOINTNFERECEPCAOEVENTO = "https://www.nfe.fazenda.gov.br/NFeRecepcaoEvento4/NFeRecepcaoEvento4.asmx";
+        private const string CUFMANIFESTOAN = "91";
+
         private X509Certificate2 _Certificado;
         private string _EndPointNFeDistribuicaoDFe;
         private string _EndPointNFeRecepcaoEvento;
         private TAmb _Ambiente;
+        private bool _DisposeCertificado;
 
         /// <summary>
         /// Código IBGE do orgão que irá recepcionar os eventos de manifesto do destinatário
@@ -29,7 +34,7 @@ namespace Sefaz.Core
         public TCOrgaoIBGE OrgaoManifesto { get; protected set; }
 
         /// <summary>
-        /// Construtor
+        /// Constrói um objeto pasando o caminho e a senha de um certificado (A1)
         /// </summary>
         /// <param name="certificado">Caminho do certificado</param>
         /// <param name="senha">Senha do certificado</param>
@@ -40,9 +45,9 @@ namespace Sefaz.Core
         public Sefaz(string certificado, 
                      string senha = null, 
                      TAmb ambiente = TAmb.Producao,
-                     string endPointNFeDistribuicaoDFe = "https://www1.nfe.fazenda.gov.br/NFeDistribuicaoDFe/NFeDistribuicaoDFe.asmx",
-                     string endPointNFeRecepcaoEvento = "https://www.nfe.fazenda.gov.br/NFeRecepcaoEvento4/NFeRecepcaoEvento4.asmx",
-                     string cUFManifesto = "91")
+                     string endPointNFeDistribuicaoDFe = ENDPOINTNFEDISTRIBUICAODFE,
+                     string endPointNFeRecepcaoEvento = ENDPOINTNFERECEPCAOEVENTO,
+                     string cUFManifesto = CUFMANIFESTOAN)
         {
             _EndPointNFeDistribuicaoDFe = endPointNFeDistribuicaoDFe;
             _EndPointNFeRecepcaoEvento = endPointNFeRecepcaoEvento;
@@ -54,6 +59,36 @@ namespace Sefaz.Core
             OrgaoManifesto = cUF;
 
             this._Certificado = new X509Certificate2(certificado, senha, X509KeyStorageFlags.MachineKeySet);
+            _DisposeCertificado = true;
+        }
+
+        /// <summary>
+        /// Constrói um objeto passando um certificado X509Certificate2 (A1 ou A3)
+        /// </summary>
+        /// <param name="certificado">Certificado</param>
+        /// <param name="ambiente">Ambiente de produção ou homologação</param>
+        /// <param name="endPointNFeDistribuicaoDFe">Endereço do serviço de distribuição de NFe e eventos</param>
+        /// <param name="endPointNFeRecepcaoEvento">Endereço do serviço de recepção de eventos</param>
+        /// <param name="cUFManifesto">Código IBGE do orgão que irá recepcionar eventos de manifesto do destinatário (91 = Ambiente Nacional)</param>
+        /// <param name="disposeCertificado">Indica se ao fazer o dispose desse objeto o dispose do certificado deve ser feito automáticamente</param>
+        public Sefaz(X509Certificate2 certificado,
+                     TAmb ambiente = TAmb.Producao,
+                     string endPointNFeDistribuicaoDFe = ENDPOINTNFEDISTRIBUICAODFE,
+                     string endPointNFeRecepcaoEvento = ENDPOINTNFERECEPCAOEVENTO,
+                     string cUFManifesto = CUFMANIFESTOAN,
+                     bool disposeCertificado = false)
+        {
+            _EndPointNFeDistribuicaoDFe = endPointNFeDistribuicaoDFe;
+            _EndPointNFeRecepcaoEvento = endPointNFeRecepcaoEvento;
+            _Ambiente = ambiente;
+
+            TCOrgaoIBGE cUF;
+            if (!TCOrgaoIBGE.TryParse("Item" + cUFManifesto, out cUF))
+                throw new ArgumentException("Código IBGE inválido para recepção de manifestos do destinatário!", nameof(cUFManifesto));
+            OrgaoManifesto = cUF;
+
+            this._Certificado = certificado;
+            _DisposeCertificado = disposeCertificado;
         }
 
         /// <summary>
@@ -66,7 +101,6 @@ namespace Sefaz.Core
         [Obsolete("O nome dessa função mudou para BaixarNFeAsync.", true)]
         public Task<Documento> DownloadNFe(string cUF, string cnpj, string chave) => BaixarNFeAsync(cUF, cnpj, chave);
 
-        
         /// <summary>
         /// Chama o WS da Sefaz para baixar a NFe
         /// </summary>
@@ -421,6 +455,10 @@ namespace Sefaz.Core
         /// <summary>
         /// Libera recursos
         /// </summary>
-        public void Dispose() => _Certificado?.Dispose();
+        public void Dispose()
+        {
+            if(_DisposeCertificado)
+                _Certificado?.Dispose();
+        }
     }
 }
