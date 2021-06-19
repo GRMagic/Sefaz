@@ -22,7 +22,7 @@ namespace Sefaz.Exemplo
 
             // -------------- Manifestar ciência da emissão por parte do destinatário --------------
 
-            await sefaz.ManifestarNFe(cnpj, chaveNFe, Core.Meta.TEventoInfEventoDetEventoDescEvento.CienciaDaOperacao);
+            await sefaz.ManifestarNFeAsync(cnpj, chaveNFe, Core.Meta.TEventoInfEventoDetEventoDescEvento.CienciaDaOperacao);
             // OBS.: É comum a SEFAZ demorar alguns segundos para liberar a NFe para download
 
             // -------------- Baixar uma NFe pela Chave --------------
@@ -31,14 +31,14 @@ namespace Sefaz.Exemplo
             var pasta = @"D:\Temp\";
 
             // Download do xml assinado (com valor fiscal)
-            var doc = await sefaz.BaixarNFe(cUF, cnpj, chaveNFe);
+            var doc = await sefaz.BaixarNFeAsync(cUF, cnpj, chaveNFe);
 
             doc.SalvarArquivo($@"{pasta}{chaveNFe}.xml");
 
             // -------------- Consultar as notas e eventos de um cnpj --------------
 
             // Busca os útimos 90 dias
-            var documentos = await sefaz.ConsultarNFeCNPJ(cUF, cnpj);
+            var documentos = await sefaz.ConsultarNFeCNPJAsync(cUF, cnpj);
             
             foreach(var documento in documentos)
             {
@@ -47,7 +47,7 @@ namespace Sefaz.Exemplo
 
             // -------------- Consultar XML conhecendo o NSU --------------
 
-            doc = await sefaz.ConsultarNFeNSU(cUF, cnpj, 1234);
+            doc = await sefaz.ConsultarNFeNSUAsync(cUF, cnpj, 1234);
         }
     }
 }
