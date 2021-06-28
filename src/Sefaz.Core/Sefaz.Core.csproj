@@ -33,9 +33,5 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Meta\EventoManifestaDest\" />
-  </ItemGroup>
   
 </Project>

@@ -22,7 +22,7 @@ namespace Sefaz.Exemplo
 
             // -------------- Manifestar ciência da emissão por parte do destinatário --------------
 
-            await sefaz.ManifestarNFeAsync(cnpj, chaveNFe, Core.Meta.TEventoInfEventoDetEventoDescEvento.CienciaDaOperacao);
+            await sefaz.ManifestarNFeAsync(cnpj, chaveNFe, Core.Models.NFe.TEventoInfEventoDetEventoDescEvento.CienciaDaOperacao);
             // OBS.: É comum a SEFAZ demorar alguns segundos para liberar a NFe para download
 
             // -------------- Baixar uma NFe pela Chave --------------

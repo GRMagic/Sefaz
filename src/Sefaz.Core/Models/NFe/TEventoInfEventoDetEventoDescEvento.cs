@@ -1,4 +1,4 @@
-﻿namespace Sefaz.Core.Meta
+﻿namespace Sefaz.Core.Models.NFe
 {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]

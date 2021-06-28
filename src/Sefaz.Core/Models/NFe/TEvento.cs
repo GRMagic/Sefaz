@@ -1,49 +1,51 @@
-﻿namespace Sefaz.Core.Meta
+﻿namespace Sefaz.Core.Models.NFe
 {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://www.portalfiscal.inf.br/nfe")]
-    public partial class TEventoInfEventoDetEvento
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://www.portalfiscal.inf.br/nfe")]
+    [System.Xml.Serialization.XmlRootAttribute("evento", Namespace = "http://www.portalfiscal.inf.br/nfe", IsNullable = false)]
+    public partial class TEvento
     {
 
-        private TEventoInfEventoDetEventoDescEvento descEventoField;
+        private TEventoInfEvento infEventoField;
 
-        private string xJustField;
+        private SignatureType signatureField;
 
-        private TEventoInfEventoDetEventoVersao versaoField;
+        private string versaoField;
 
         /// <remarks/>
-        public TEventoInfEventoDetEventoDescEvento descEvento
+        public TEventoInfEvento infEvento
         {
             get
             {
-                return this.descEventoField;
+                return this.infEventoField;
             }
             set
             {
-                this.descEventoField = value;
+                this.infEventoField = value;
             }
         }
 
         /// <remarks/>
-        public string xJust
+        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://www.w3.org/2000/09/xmldsig#")]
+        public SignatureType Signature
         {
             get
             {
-                return this.xJustField;
+                return this.signatureField;
             }
             set
             {
-                this.xJustField = value;
+                this.signatureField = value;
             }
         }
 
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public TEventoInfEventoDetEventoVersao versao
+        public string versao
         {
             get
             {

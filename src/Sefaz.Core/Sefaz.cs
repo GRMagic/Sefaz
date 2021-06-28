@@ -1,5 +1,4 @@
-﻿using Meta.EventoManifestaDest;
-using Sefaz.Core.Meta;
+﻿using Sefaz.Core.Models;
 using Sefaz.WCF.NFeDistribuicaoDFe;
 using Sefaz.WCF.NFeRecepcaoEvento4;
 using System;
@@ -19,19 +18,21 @@ namespace Sefaz.Core
     public class Sefaz : ISefaz
     {
         private const string ENDPOINTNFEDISTRIBUICAODFE = "https://www1.nfe.fazenda.gov.br/NFeDistribuicaoDFe/NFeDistribuicaoDFe.asmx";
+        private const string ENDPOINTCTEDISTRIBUICAODFE = "https://www1.cte.fazenda.gov.br/CTeDistribuicaoDFe/CTeDistribuicaoDFe.asmx";
         private const string ENDPOINTNFERECEPCAOEVENTO = "https://www.nfe.fazenda.gov.br/NFeRecepcaoEvento4/NFeRecepcaoEvento4.asmx";
         private const string CUFMANIFESTOAN = "91";
 
         private X509Certificate2 _Certificado;
         private string _EndPointNFeDistribuicaoDFe;
+        private string _EndPointCTeDistribuicaoDFe;
         private string _EndPointNFeRecepcaoEvento;
-        private TAmb _Ambiente;
+        private Models.NFe.TAmb _Ambiente;
         private bool _DisposeCertificado;
 
         /// <summary>
         /// Código IBGE do orgão que irá recepcionar os eventos de manifesto do destinatário
         /// </summary>
-        public TCOrgaoIBGE OrgaoManifesto { get; protected set; }
+        public Models.NFe.TCOrgaoIBGE OrgaoManifesto { get; protected set; }
 
         /// <summary>
         /// Constrói um objeto pasando o caminho e a senha de um certificado (A1)
@@ -40,21 +41,24 @@ namespace Sefaz.Core
         /// <param name="senha">Senha do certificado</param>
         /// <param name="ambiente">Ambiente de produção ou homologação</param>
         /// <param name="endPointNFeDistribuicaoDFe">Endereço do serviço de distribuição de NFe e eventos</param>
-        /// <param name="endPointNFeRecepcaoEvento">Endereço do serviço de recepção de eventos</param>
+        /// <param name="endPointCTeDistribuicaoDFe">Endereço do serviço de distribuição de CTe e eventos</param>
+        /// <param name="endPointNFeRecepcaoEvento">Endereço do serviço de recepção de eventos NFe</param>
         /// <param name="cUFManifesto">Código IBGE do orgão que irá recepcionar eventos de manifesto do destinatário (91 = Ambiente Nacional)</param>
         public Sefaz(string certificado, 
-                     string senha = null, 
-                     TAmb ambiente = TAmb.Producao,
+                     string senha = null,
+                     Models.NFe.TAmb ambiente = Models.NFe.TAmb.Producao,
                      string endPointNFeDistribuicaoDFe = ENDPOINTNFEDISTRIBUICAODFE,
+                     string endPointCTeDistribuicaoDFe = ENDPOINTCTEDISTRIBUICAODFE,
                      string endPointNFeRecepcaoEvento = ENDPOINTNFERECEPCAOEVENTO,
                      string cUFManifesto = CUFMANIFESTOAN)
         {
             _EndPointNFeDistribuicaoDFe = endPointNFeDistribuicaoDFe;
+            _EndPointCTeDistribuicaoDFe = endPointCTeDistribuicaoDFe;
             _EndPointNFeRecepcaoEvento = endPointNFeRecepcaoEvento;
             _Ambiente = ambiente;
 
-            TCOrgaoIBGE cUF;
-            if (!TCOrgaoIBGE.TryParse("Item" + cUFManifesto, out cUF)) 
+            Models.NFe.TCOrgaoIBGE cUF;
+            if (!Models.NFe.TCOrgaoIBGE.TryParse("Item" + cUFManifesto, out cUF)) 
                 throw new ArgumentException("Código IBGE inválido para recepção de manifestos do destinatário!", nameof(cUFManifesto));
             OrgaoManifesto = cUF;
 
@@ -68,22 +72,25 @@ namespace Sefaz.Core
         /// <param name="certificado">Certificado</param>
         /// <param name="ambiente">Ambiente de produção ou homologação</param>
         /// <param name="endPointNFeDistribuicaoDFe">Endereço do serviço de distribuição de NFe e eventos</param>
+        /// <param name="endPointCTeDistribuicaoDFe">Endereço do serviço de distribuição de CTe e eventos</param>
         /// <param name="endPointNFeRecepcaoEvento">Endereço do serviço de recepção de eventos</param>
         /// <param name="cUFManifesto">Código IBGE do orgão que irá recepcionar eventos de manifesto do destinatário (91 = Ambiente Nacional)</param>
         /// <param name="disposeCertificado">Indica se ao fazer o dispose desse objeto o dispose do certificado deve ser feito automáticamente</param>
         public Sefaz(X509Certificate2 certificado,
-                     TAmb ambiente = TAmb.Producao,
+                     Models.NFe.TAmb ambiente = Models.NFe.TAmb.Producao,
                      string endPointNFeDistribuicaoDFe = ENDPOINTNFEDISTRIBUICAODFE,
+                     string endPointCTeDistribuicaoDFe = ENDPOINTCTEDISTRIBUICAODFE,
                      string endPointNFeRecepcaoEvento = ENDPOINTNFERECEPCAOEVENTO,
                      string cUFManifesto = CUFMANIFESTOAN,
                      bool disposeCertificado = false)
         {
             _EndPointNFeDistribuicaoDFe = endPointNFeDistribuicaoDFe;
+            _EndPointCTeDistribuicaoDFe = endPointCTeDistribuicaoDFe;
             _EndPointNFeRecepcaoEvento = endPointNFeRecepcaoEvento;
             _Ambiente = ambiente;
 
-            TCOrgaoIBGE cUF;
-            if (!TCOrgaoIBGE.TryParse("Item" + cUFManifesto, out cUF))
+            Models.NFe.TCOrgaoIBGE cUF;
+            if (!Models.NFe.TCOrgaoIBGE.TryParse("Item" + cUFManifesto, out cUF))
                 throw new ArgumentException("Código IBGE inválido para recepção de manifestos do destinatário!", nameof(cUFManifesto));
             OrgaoManifesto = cUF;
 
@@ -144,7 +151,7 @@ namespace Sefaz.Core
         /// <exception cref="SefazException">Pode lançar uma exceção caso o cStat tenha algum valor inesperado</exception>
         /// <remarks>O schema (xsd) não está sendo validado antes do envio</remarks>
         [Obsolete("O nome dessa função mudou para ManifestarNFeAsync.")] 
-        public Task ManifestarNFe(string cnpj, string chave, TEventoInfEventoDetEventoDescEvento evento, int sequencia = 1, string justificativa = null) => ManifestarNFeAsync(cnpj, chave, evento, sequencia, justificativa);
+        public Task ManifestarNFe(string cnpj, string chave, Models.NFe.TEventoInfEventoDetEventoDescEvento evento, int sequencia = 1, string justificativa = null) => ManifestarNFeAsync(cnpj, chave, evento, sequencia, justificativa);
 
         /// <summary>
         /// Chama o WS da Sefaz para baixar a NFe
@@ -163,7 +170,7 @@ namespace Sefaz.Core
             if (chave.Length != 44) throw new ArgumentException("A chave deve ter 44 algarismos.", nameof(chave));
 
             // Dados
-            var dados = new distDFeIntConsChNFe
+            var dados = new Models.NFe.distDFeIntConsChNFe
             {
                 chNFe = chave
             };
@@ -204,7 +211,7 @@ namespace Sefaz.Core
             if (nsu < 0) throw new ArgumentException("O NSU deve ser um número positivo.", nameof(nsu));
 
             // Dados
-            var dados = new distDFeIntConsNSU
+            var dados = new Models.NFe.distDFeIntConsNSU
             {
                 NSU = nsu.ToString("000000000000000")
             };
@@ -247,7 +254,7 @@ namespace Sefaz.Core
             do
             {
                 // Chamada ao serviço
-                var consulta = await ChamarWsNFe(cUF, cnpj, new distDFeIntDistNSU
+                var consulta = await ChamarWsNFe(cUF, cnpj, new Models.NFe.distDFeIntDistNSU
                 {
                     ultNSU = lista.UltimoNSU.ToString("000000000000000") // 15 algarismos!
                 });
@@ -294,7 +301,7 @@ namespace Sefaz.Core
         /// <param name="justificativa">Justificativa caso necessária</param>
         /// <exception cref="SefazException">Pode lançar uma exceção caso o cStat tenha algum valor inesperado</exception>
         /// <remarks>O schema (xsd) não está sendo validado antes do envio</remarks>
-        public async Task ManifestarNFeAsync(string cnpj, string chave, TEventoInfEventoDetEventoDescEvento evento, int sequencia = 1, string justificativa = null)
+        public async Task ManifestarNFeAsync(string cnpj, string chave, Models.NFe.TEventoInfEventoDetEventoDescEvento evento, int sequencia = 1, string justificativa = null)
         {
             if (string.IsNullOrWhiteSpace(cnpj)) throw new ArgumentNullException(nameof(cnpj));
             if (cnpj.Length != 14) throw new ArgumentException("O CNPJ deve ter 14 algarismos.", nameof(cnpj));
@@ -315,55 +322,55 @@ namespace Sefaz.Core
             ws.ClientCredentials.ClientCertificate.Certificate = _Certificado;
 
             // Dados
-            TEventoInfEventoTpEvento tpEvento;
+            Models.NFe.TEventoInfEventoTpEvento tpEvento;
             string id;
             string nSeqEvento;
             switch (evento)
             {
-                case TEventoInfEventoDetEventoDescEvento.CienciaDaOperacao:
-                    tpEvento = TEventoInfEventoTpEvento.CienciaDaEmissao;
+                case Models.NFe.TEventoInfEventoDetEventoDescEvento.CienciaDaOperacao:
+                    tpEvento = Models.NFe.TEventoInfEventoTpEvento.CienciaDaEmissao;
                     nSeqEvento = "1"; // FIXO "1"
                     id = "ID" + "210210" + chave + nSeqEvento.PadLeft(2, '0'); // "ID" + tpEvento + chave da NF-e + nSeqEvento 
                     break;
-                case TEventoInfEventoDetEventoDescEvento.ConfirmacaoDaOperacao:
-                    tpEvento = TEventoInfEventoTpEvento.ConfirmacaoDaOperacao;
+                case Models.NFe.TEventoInfEventoDetEventoDescEvento.ConfirmacaoDaOperacao:
+                    tpEvento = Models.NFe.TEventoInfEventoTpEvento.ConfirmacaoDaOperacao;
                     nSeqEvento = sequencia.ToString();
                     id = "ID" + "210200" + chave + nSeqEvento.PadLeft(2, '0');
                     break;
-                case TEventoInfEventoDetEventoDescEvento.DesconhecimentoDaOperacao:
-                    tpEvento = TEventoInfEventoTpEvento.DesconhecimentoDaOperacao;
+                case Models.NFe.TEventoInfEventoDetEventoDescEvento.DesconhecimentoDaOperacao:
+                    tpEvento = Models.NFe.TEventoInfEventoTpEvento.DesconhecimentoDaOperacao;
                     nSeqEvento = sequencia.ToString();
                     id = "ID" + "210220" + chave + nSeqEvento.PadLeft(2, '0');
                     break;
-                case TEventoInfEventoDetEventoDescEvento.OperacaoNaoRealizada:
-                    tpEvento = TEventoInfEventoTpEvento.OperacaoNaoRealizada;
+                case Models.NFe.TEventoInfEventoDetEventoDescEvento.OperacaoNaoRealizada:
+                    tpEvento = Models.NFe.TEventoInfEventoTpEvento.OperacaoNaoRealizada;
                     nSeqEvento = sequencia.ToString();
                     id = "ID" + "210240" + chave + nSeqEvento.PadLeft(2, '0');
                     break;
                 default:
                     throw new NotImplementedException("Tipo de evento não suportado!");
             }
-            var dados = new TEnvEvento
+            var dados = new Models.NFe.TEnvEvento
             {
                 versao = "1.00",
                 idLote = 1.ToString("000000000000000"),
                 evento = new[]{
-                    new TEvento {
+                    new Models.NFe.TEvento {
                         versao = "1.00", // Versão do layout do evento
-                        infEvento = new TEventoInfEvento {
+                        infEvento = new Models.NFe.TEventoInfEvento {
                             Id = id, // Identificador da TAG a ser assinada, a regra de formação do Id é: “ID” + tpEvento + chave da NF-e + nSeqEvento 
                             cOrgao = OrgaoManifesto, // Código do órgão de recepção do Evento. Utilizar a Tabela de UF do IBGE, utilizar 91 para identificar o Ambiente Nacional.
                             tpAmb = _Ambiente,
                             Item = cnpj,
-                            ItemElementName = cnpj.Length > 11 ? TipoPessoa.CNPJ : TipoPessoa.CPF,
+                            ItemElementName = cnpj.Length > 11 ? Models.NFe.TipoPessoa.CNPJ : Models.NFe.TipoPessoa.CPF,
                             chNFe = chave,
                             dhEvento = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:sszzz"),
                             tpEvento = tpEvento,
                             nSeqEvento = nSeqEvento,
                             verEvento = "1.00", // Identificação da Versão do evento informado em detEvento
-                            detEvento = new TEventoInfEventoDetEvento
+                            detEvento = new Models.NFe.TEventoInfEventoDetEvento
                             {
-                                versao = TEventoInfEventoDetEventoVersao.Item100,
+                                versao = Models.NFe.TEventoInfEventoDetEventoVersao.Item100,
                                 descEvento = evento,
                                 xJust = justificativa
                             }
@@ -379,7 +386,7 @@ namespace Sefaz.Core
             var streamWriter = new StreamWriter(memoryStream);
             XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
             ns.Add("", "http://www.portalfiscal.inf.br/nfe");
-            new XmlSerializer(typeof(TEnvEvento)).Serialize(streamWriter, dados, ns);
+            new XmlSerializer(typeof(Models.NFe.TEnvEvento)).Serialize(streamWriter, dados, ns);
             corpo.LoadXml(Encoding.UTF8.GetString(memoryStream.ToArray()));
 
             //Assinar(ref corpo);
@@ -389,7 +396,7 @@ namespace Sefaz.Core
             var resposta = await ws.nfeRecepcaoEventoNFAsync(corpo);
 
             // Trabalha com a resposta
-            var retorno = resposta.nfeRecepcaoEventoNFResult.DeserializeTo<TRetEnvEvento>();
+            var retorno = resposta.nfeRecepcaoEventoNFResult.DeserializeTo<Models.NFe.TRetEnvEvento>();
             if (retorno.cStat != "128") throw new SefazException(retorno.cStat, retorno.xMotivo);
             var infEvento = retorno.retEvento[0].infEvento;
             if (infEvento.cStat != "135") throw new SefazException(infEvento.cStat, infEvento.xMotivo);
@@ -402,7 +409,7 @@ namespace Sefaz.Core
         /// <param name="cUF">Código da UF (IBGE)</param>
         /// <param name="cnpj">CNPJ da empresa (14 dígitos - sem máscara)</param>
         /// <param name="dados">Dados que serão enviados para o webservice</param>
-        private async Task<retDistDFeInt> ChamarWsNFe(string cUF, string cnpj, object dados)
+        private async Task<Models.NFe.retDistDFeInt> ChamarWsNFe(string cUF, string cnpj, object dados)
         {
             if (DateTime.UtcNow > _Certificado.NotAfter) throw new Exception($"O certificado venceu em {_Certificado.NotAfter}!");
             if (DateTime.UtcNow < _Certificado.NotBefore) throw new Exception("O certificado ainda não é válido!");
@@ -421,20 +428,20 @@ namespace Sefaz.Core
                 ws.ClientCredentials.ClientCertificate.Certificate = _Certificado;
 
                 // Dados
-                TCodUfIBGE eUF;
-                if (!TCodUfIBGE.TryParse("Item" + cUF, out eUF)) throw new ArgumentException("Código IBGE da UF Inválido!", nameof(cUF));
+                Models.NFe.TCodUfIBGE eUF;
+                if (!Models.NFe.TCodUfIBGE.TryParse("Item" + cUF, out eUF)) throw new ArgumentException("Código IBGE da UF Inválido!", nameof(cUF));
                 using var memoryStream = new MemoryStream();
                 using var streamWriter = new StreamWriter(memoryStream);
 
-                new XmlSerializer(typeof(distDFeInt)).Serialize(streamWriter, new distDFeInt
+                new XmlSerializer(typeof(Models.NFe.distDFeInt)).Serialize(streamWriter, new Models.NFe.distDFeInt
                 {
                     tpAmb = _Ambiente,
                     cUFAutor = eUF,
                     cUFAutorSpecified = true,
-                    ItemElementName = cnpj.Length > 11 ? TipoPessoa.CNPJ : TipoPessoa.CPF,
+                    ItemElementName = cnpj.Length > 11 ? Models.NFe.TipoPessoa.CNPJ : Models.NFe.TipoPessoa.CPF,
                     CpjCnpj = cnpj,
                     Item1 = dados,
-                    versao = TVerDistDFe.Item101,
+                    versao = Models.NFe.TVerDistDFe.Item101,
                 });
                 var xmlDocument = new XmlDocument();
                 xmlDocument.LoadXml(Encoding.UTF8.GetString(memoryStream.ToArray()));
@@ -443,7 +450,63 @@ namespace Sefaz.Core
                 var resposta = await ws.nfeDistDFeInteresseAsync(xmlDocument.DocumentElement);
 
                 // Trabalha com a resposta
-                return resposta.Body.nfeDistDFeInteresseResult.DeserializeTo<retDistDFeInt>();
+                return resposta.Body.nfeDistDFeInteresseResult.DeserializeTo<Models.NFe.retDistDFeInt>();
+
+            }
+            finally
+            {
+                await ws.CloseAsync();
+            }
+        }
+
+
+        /// <summary>
+        /// Faz a chamada para o webservice de distribuição de CTe
+        /// </summary>
+        /// <param name="cUF">Código da UF (IBGE)</param>
+        /// <param name="cnpj">CNPJ da empresa (14 dígitos - sem máscara)</param>
+        /// <param name="dados">Dados que serão enviados para o webservice</param>
+        private async Task<Models.CTe.retDistDFeInt> ChamarWsCTe(string cUF, string cnpj, object dados)
+        {
+            if (DateTime.UtcNow > _Certificado.NotAfter) throw new Exception($"O certificado venceu em {_Certificado.NotAfter}!");
+            if (DateTime.UtcNow < _Certificado.NotBefore) throw new Exception("O certificado ainda não é válido!");
+
+            // Configuração do ws
+            var endpoint = new System.ServiceModel.EndpointAddress(_EndPointCTeDistribuicaoDFe);
+            var binding = new System.ServiceModel.BasicHttpBinding(System.ServiceModel.BasicHttpSecurityMode.Transport) { MaxReceivedMessageSize = 999999999 };
+            binding.Security.Transport.ClientCredentialType = System.ServiceModel.HttpClientCredentialType.Certificate;
+
+            // Instância do cliente
+            var ws = new WCF.CTeDistribuicaoDFe.CTeDistribuicaoDFeSoapClient(binding, endpoint);
+
+            try
+            {
+                // Definição do certificado
+                ws.ClientCredentials.ClientCertificate.Certificate = _Certificado;
+
+                // Dados
+                Models.CTe.TCodUfIBGE eUF;
+                if (!Models.CTe.TCodUfIBGE.TryParse("Item" + cUF, out eUF)) throw new ArgumentException("Código IBGE da UF Inválido!", nameof(cUF));
+                using var memoryStream = new MemoryStream();
+                using var streamWriter = new StreamWriter(memoryStream);
+
+                new XmlSerializer(typeof(Models.CTe.distDFeInt)).Serialize(streamWriter, new Models.CTe.distDFeInt
+                {
+                    tpAmb = (Models.CTe.TAmb)_Ambiente,
+                    cUFAutor = eUF,
+                    ItemElementName = cnpj.Length > 11 ? Models.CTe.TipoPessoa.CNPJ : Models.CTe.TipoPessoa.CPF,
+                    CpjCnpj = cnpj,
+                    Item1 = dados,
+                    versao = Models.CTe.TVerDistDFe.Item100,
+                });
+                var xmlDocument = new XmlDocument();
+                xmlDocument.LoadXml(Encoding.UTF8.GetString(memoryStream.ToArray()));
+
+                // Chama o web service
+                var resposta = await ws.cteDistDFeInteresseAsync(xmlDocument.DocumentElement);
+
+                // Trabalha com a resposta
+                return resposta.Body.cteDistDFeInteresseResult.DeserializeTo<Models.CTe.retDistDFeInt>();
 
             }
             finally
