@@ -1,4 +1,5 @@
 ﻿using Sefaz.Core.Models;
+using Sefaz.Core.Models.NFe;
 using Sefaz.WCF.NFeDistribuicaoDFe;
 using Sefaz.WCF.NFeRecepcaoEvento4;
 using System;
