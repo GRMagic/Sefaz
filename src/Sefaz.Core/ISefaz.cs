@@ -1,4 +1,4 @@
-﻿using Sefaz.Core.Meta;
+﻿using Sefaz.Core.Models.NFe;
 using System;
 using System.Threading.Tasks;
 

@@ -1,5 +1,5 @@
-﻿using Meta.EventoManifestaDest;
-using Sefaz.Core.Meta;
+﻿using Sefaz.Core.Models;
+using Sefaz.Core.Models.NFe;
 using Sefaz.WCF.NFeDistribuicaoDFe;
 using Sefaz.WCF.NFeRecepcaoEvento4;
 using System;
@@ -19,11 +19,13 @@ namespace Sefaz.Core
     public class Sefaz : ISefaz
     {
         private const string ENDPOINTNFEDISTRIBUICAODFE = "https://www1.nfe.fazenda.gov.br/NFeDistribuicaoDFe/NFeDistribuicaoDFe.asmx";
+        private const string ENDPOINTCTEDISTRIBUICAODFE = "https://www1.cte.fazenda.gov.br/CTeDistribuicaoDFe/CTeDistribuicaoDFe.asmx";
         private const string ENDPOINTNFERECEPCAOEVENTO = "https://www.nfe.fazenda.gov.br/NFeRecepcaoEvento4/NFeRecepcaoEvento4.asmx";
         private const string CUFMANIFESTOAN = "91";
 
         private X509Certificate2 _Certificado;
         private string _EndPointNFeDistribuicaoDFe;
+        private string _EndPointCTeDistribuicaoDFe;
         private string _EndPointNFeRecepcaoEvento;
         private TAmb _Ambiente;
         private bool _DisposeCertificado;
@@ -40,16 +42,19 @@ namespace Sefaz.Core
         /// <param name="senha">Senha do certificado</param>
         /// <param name="ambiente">Ambiente de produção ou homologação</param>
         /// <param name="endPointNFeDistribuicaoDFe">Endereço do serviço de distribuição de NFe e eventos</param>
-        /// <param name="endPointNFeRecepcaoEvento">Endereço do serviço de recepção de eventos</param>
+        /// <param name="endPointCTeDistribuicaoDFe">Endereço do serviço de distribuição de CTe e eventos</param>
+        /// <param name="endPointNFeRecepcaoEvento">Endereço do serviço de recepção de eventos NFe</param>
         /// <param name="cUFManifesto">Código IBGE do orgão que irá recepcionar eventos de manifesto do destinatário (91 = Ambiente Nacional)</param>
         public Sefaz(string certificado, 
                      string senha = null, 
                      TAmb ambiente = TAmb.Producao,
                      string endPointNFeDistribuicaoDFe = ENDPOINTNFEDISTRIBUICAODFE,
+                     string endPointCTeDistribuicaoDFe = ENDPOINTCTEDISTRIBUICAODFE,
                      string endPointNFeRecepcaoEvento = ENDPOINTNFERECEPCAOEVENTO,
                      string cUFManifesto = CUFMANIFESTOAN)
         {
             _EndPointNFeDistribuicaoDFe = endPointNFeDistribuicaoDFe;
+            _EndPointCTeDistribuicaoDFe = endPointCTeDistribuicaoDFe;
             _EndPointNFeRecepcaoEvento = endPointNFeRecepcaoEvento;
             _Ambiente = ambiente;
 
@@ -68,17 +73,20 @@ namespace Sefaz.Core
         /// <param name="certificado">Certificado</param>
         /// <param name="ambiente">Ambiente de produção ou homologação</param>
         /// <param name="endPointNFeDistribuicaoDFe">Endereço do serviço de distribuição de NFe e eventos</param>
+        /// <param name="endPointCTeDistribuicaoDFe">Endereço do serviço de distribuição de CTe e eventos</param>
         /// <param name="endPointNFeRecepcaoEvento">Endereço do serviço de recepção de eventos</param>
         /// <param name="cUFManifesto">Código IBGE do orgão que irá recepcionar eventos de manifesto do destinatário (91 = Ambiente Nacional)</param>
         /// <param name="disposeCertificado">Indica se ao fazer o dispose desse objeto o dispose do certificado deve ser feito automáticamente</param>
         public Sefaz(X509Certificate2 certificado,
                      TAmb ambiente = TAmb.Producao,
                      string endPointNFeDistribuicaoDFe = ENDPOINTNFEDISTRIBUICAODFE,
+                     string endPointCTeDistribuicaoDFe = ENDPOINTCTEDISTRIBUICAODFE,
                      string endPointNFeRecepcaoEvento = ENDPOINTNFERECEPCAOEVENTO,
                      string cUFManifesto = CUFMANIFESTOAN,
                      bool disposeCertificado = false)
         {
             _EndPointNFeDistribuicaoDFe = endPointNFeDistribuicaoDFe;
+            _EndPointCTeDistribuicaoDFe = endPointCTeDistribuicaoDFe;
             _EndPointNFeRecepcaoEvento = endPointNFeRecepcaoEvento;
             _Ambiente = ambiente;
 

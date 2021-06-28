@@ -75,7 +75,7 @@ namespace Sefaz.Core
         /// </summary>
         /// <param name="docZip">Dados compactados</param>
         /// <returns>Dados descompactados</returns>
-        internal static XmlDocument Decompress(this Meta.retDistDFeIntLoteDistDFeIntDocZip docZip)
+        internal static XmlDocument Decompress(this Models.NFe.retDistDFeIntLoteDistDFeIntDocZip docZip)
         {
             using var strStream = new MemoryStream();
             strStream.Write(docZip.Value, 0, docZip.Value.Length);

@@ -1,4 +1,4 @@
-﻿namespace Sefaz.Core.Meta
+﻿namespace Sefaz.Core.Models.NFe
 {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
@@ -6,40 +6,40 @@
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://www.portalfiscal.inf.br/nfe")]
-    [System.Xml.Serialization.XmlRootAttribute("evento", Namespace = "http://www.portalfiscal.inf.br/nfe", IsNullable = false)]
-    public partial class TEvento
+    [System.Xml.Serialization.XmlRootAttribute("envEvento", Namespace = "http://www.portalfiscal.inf.br/nfe", IsNullable = false)]
+    public partial class TEnvEvento
     {
 
-        private TEventoInfEvento infEventoField;
+        private string idLoteField;
 
-        private SignatureType signatureField;
+        private TEvento[] eventoField;
 
         private string versaoField;
 
         /// <remarks/>
-        public TEventoInfEvento infEvento
+        public string idLote
         {
             get
             {
-                return this.infEventoField;
+                return this.idLoteField;
             }
             set
             {
-                this.infEventoField = value;
+                this.idLoteField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://www.w3.org/2000/09/xmldsig#")]
-        public SignatureType Signature
+        [System.Xml.Serialization.XmlElementAttribute("evento")]
+        public TEvento[] evento
         {
             get
             {
-                return this.signatureField;
+                return this.eventoField;
             }
             set
             {
-                this.signatureField = value;
+                this.eventoField = value;
             }
         }
 

@@ -35,7 +35,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Meta\EventoManifestaDest\" />
+    <Folder Include="Models\CTe\CTeDistDFe\" />
+    <Folder Include="Models\CTe\" />
   </ItemGroup>
   
 </Project>
