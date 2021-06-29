@@ -297,7 +297,7 @@ namespace Sefaz.Core.Models.CTe {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.portalfiscal.inf.br/cte")]
-    public partial class retDistDFeIntLoteDistDFeIntDocZip {
+    public partial class retDistDFeIntLoteDistDFeIntDocZip : IBase64BinaryGzip{
         
         private string nSUField;
         

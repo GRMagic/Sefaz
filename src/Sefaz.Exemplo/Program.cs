@@ -48,6 +48,11 @@ namespace Sefaz.Exemplo
             // -------------- Consultar XML conhecendo o NSU --------------
 
             doc = await sefaz.ConsultarNFeNSUAsync(cUF, cnpj, 1234);
+
+            // -------------- Consultar os conhecimentos de transporte e eventos relacionados de um cnpj --------------
+
+            // Busca os útimos 90 dias
+            documentos = await sefaz.ConsultarCTeCNPJAsync(cUF, cnpj);
         }
     }
 }

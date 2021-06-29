@@ -240,7 +240,7 @@ namespace Sefaz.Core
         /// <param name="ultimoNSU">NSU mais recente conhecido (Quando informado 0 retorna as notas dos últimos 90 dias)</param>
         /// <param name="todosLotes">Consultar automaticamente todos os lotes até o mais atual?</param>
         /// <returns>XML retornado pela Sefaz já deserializado em um objeto</returns>
-        /// <remarks>ATENÇÃO! Consultas grandes e frequentes podem causar bloqueio temporário do serviço. Evite usar ultNSU=0 mais de uma vez por hora.</remarks>
+        /// <remarks>ATENÇÃO! Consultas grandes e frequentes podem causar bloqueio temporário do serviço. Evite usar ultimoNSU=0 mais de uma vez por hora.</remarks>
         public async Task<ListaDocumentos> ConsultarNFeCNPJAsync(string cUF, string cnpj, long ultimoNSU = 0, bool todosLotes = true)
         {
             if (string.IsNullOrWhiteSpace(cUF)) throw new ArgumentNullException(nameof(cUF));
@@ -460,6 +460,65 @@ namespace Sefaz.Core
             }
         }
 
+        /// <summary>
+        /// Chama o WS da SEFAZ para consultar os conhecimentos de transporte e eventos
+        /// </summary>
+        /// <param name="cUF">Código IBGE da UF da empresa</param>
+        /// <param name="cnpj">CNPJ do interessado</param>
+        /// <param name="ultimoNSU">NSU mais recente conhecido (Quando informado 0 retorna os conhecimentos dos últimos 90 dias)</param>
+        /// <param name="todosLotes">Consultar automaticamente todos os lotes até o mais atual?</param>
+        /// <returns>XML retornado pela Sefaz já deserializado em um objeto</returns>
+        /// <remarks>ATENÇÃO! Consultas grandes e frequentes podem causar bloqueio temporário do serviço. Evite usar ultimoNSU=0 mais de uma vez por hora.</remarks>
+        public async Task<ListaDocumentos> ConsultarCTeCNPJAsync(string cUF, string cnpj, long ultimoNSU = 0, bool todosLotes = true)
+        {
+            if (string.IsNullOrWhiteSpace(cUF)) throw new ArgumentNullException(nameof(cUF));
+            if (cUF.Length != 2) throw new ArgumentException("O código da UF deve ter dois algarismos.", nameof(cUF));
+            if (string.IsNullOrWhiteSpace(cnpj)) throw new ArgumentNullException(nameof(cnpj));
+            if (cnpj.Length != 14) throw new ArgumentException("O CNPJ deve ter 14 algarismos.", nameof(cnpj));
+            if (ultimoNSU < 0) throw new ArgumentException("O NSU deve ser um número positivo.", nameof(ultimoNSU));
+
+            var lista = new ListaDocumentos();
+            lista.UltimoNSU = ultimoNSU;
+
+            do
+            {
+                // Chamada ao serviço
+                var consulta = await ChamarWsCTe(cUF, cnpj, new Models.CTe.distDFeIntDistNSU
+                {
+                    ultNSU = lista.UltimoNSU.ToString("000000000000000") // 15 algarismos!
+                });
+
+                // Tratamento do retorno
+                long.TryParse(consulta.ultNSU, out lista.UltimoNSU); // A SEFAZ manda os registros em lotes. Guardamos o ultNSU para saber onde continuar a busca
+                long.TryParse(consulta.maxNSU, out lista.NSUMaximo);
+                lista.DataHoraResposta = DateTime.ParseExact(consulta.dhResp, "yyyy-MM-ddTHH:mm:ss", null);
+
+                switch (consulta.cStat)
+                {
+                    case "137": // Nenhum documento localizado para o interessado
+                        break;
+
+                    case "138": // Documento(s) localizado(s) para o interessado 
+                        foreach (var docZip in consulta.loteDistDFeInt.docZip)
+                        {
+                            var documento = new Documento()
+                            {
+                                NSU = long.Parse(docZip.NSU),
+                                Schema = docZip.schema,
+                                Xml = docZip.Decompress()
+                            };
+                            lista.Documentos.Add(documento);
+                        }
+                        break;
+
+                    default:
+                        throw new SefazException(consulta.cStat, consulta.xMotivo);
+                }
+
+            } while (todosLotes && lista.UltimoNSU < lista.NSUMaximo);
+
+            return lista;
+        }
 
         /// <summary>
         /// Faz a chamada para o webservice de distribuição de CTe
