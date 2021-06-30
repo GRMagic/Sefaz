@@ -1,6 +1,4 @@
-﻿using Sefaz.Core.Models;
-using Sefaz.Core.Models.NFe;
-using Sefaz.WCF.NFeDistribuicaoDFe;
+﻿using Sefaz.WCF.NFeDistribuicaoDFe;
 using Sefaz.WCF.NFeRecepcaoEvento4;
 using System;
 using System.IO;
@@ -116,7 +114,7 @@ namespace Sefaz.Core
         /// <param name="cnpj">CNPJ</param>
         /// <param name="chave">Chave da nota</param>
         /// <returns>Documento retornado pela SEFAZ</returns>
-        [Obsolete("O nome dessa função mudou para BaixarNFeAsync.")]
+        [Obsolete("O nome dessa função mudou para BaixarNFeAsync.", true)]
         public Task<Documento> BaixarNFe(string cUF, string cnpj, string chave) => BaixarNFeAsync(cUF, cnpj, chave);
 
         /// <summary>
@@ -126,7 +124,7 @@ namespace Sefaz.Core
         /// <param name="cnpj">CNPJ do interessado</param>
         /// <param name="nsu">Número sequencial único</param>
         /// <returns>Documento retornado pela SEFAZ, não necessariamente uma NFe, pode ser algum evento por exemplo</returns>
-        [Obsolete("O nome dessa função mudou para ConsultarNFeNSUAsync.")] 
+        [Obsolete("O nome dessa função mudou para ConsultarNFeNSUAsync.", true)] 
         public Task<Documento> ConsultarNFeNSU(string cUF, string cnpj, long nsu) => ConsultarNFeNSUAsync(cUF, cnpj, nsu);
 
         /// <summary>
@@ -138,7 +136,7 @@ namespace Sefaz.Core
         /// <param name="todosLotes">Consultar automaticamente todos os lotes até o mais atual?</param>
         /// <returns>XML retornado pela Sefaz já deserializado em um objeto</returns>
         /// <remarks>ATENÇÃO! Consultas grandes e frequentes podem causar bloqueio temporário do serviço. Evite usar ultNSU=0 mais de uma vez por hora.</remarks>
-        [Obsolete("O nome dessa função mudou para ConsultarNFeCNPJAsync.")]
+        [Obsolete("O nome dessa função mudou para ConsultarNFeCNPJAsync.", true)]
         public Task<ListaDocumentos> ConsultarNFeCNPJ(string cUF, string cnpj, long ultimoNSU = 0, bool todosLotes = true) => ConsultarNFeCNPJAsync(cUF, cnpj, ultimoNSU, todosLotes);
 
         /// <summary>
@@ -151,7 +149,7 @@ namespace Sefaz.Core
         /// <param name="justificativa">Justificativa caso necessária</param>
         /// <exception cref="SefazException">Pode lançar uma exceção caso o cStat tenha algum valor inesperado</exception>
         /// <remarks>O schema (xsd) não está sendo validado antes do envio</remarks>
-        [Obsolete("O nome dessa função mudou para ManifestarNFeAsync.")] 
+        [Obsolete("O nome dessa função mudou para ManifestarNFeAsync.", true)] 
         public Task ManifestarNFe(string cnpj, string chave, Models.NFe.TEventoInfEventoDetEventoDescEvento evento, int sequencia = 1, string justificativa = null) => ManifestarNFeAsync(cnpj, chave, evento, sequencia, justificativa);
 
         /// <summary>
