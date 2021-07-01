@@ -1,5 +1,5 @@
 # Sefaz
-Biblioteca para download de notas fiscais
+Biblioteca para download de notas fiscais e conhecimentos de transportes
 
 | Pacote |  Versão | Downloads |
 | ------- | ----- | ----- |
