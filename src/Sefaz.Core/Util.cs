@@ -75,7 +75,7 @@ namespace Sefaz.Core
         /// </summary>
         /// <param name="docZip">Dados compactados</param>
         /// <returns>Dados descompactados</returns>
-        internal static XmlDocument Decompress(this Meta.retDistDFeIntLoteDistDFeIntDocZip docZip)
+        internal static XmlDocument Decompress(this IBase64BinaryGzip docZip)
         {
             using var strStream = new MemoryStream();
             strStream.Write(docZip.Value, 0, docZip.Value.Length);
@@ -86,23 +86,6 @@ namespace Sefaz.Core
             xml.Load(csStream);
             return xml;
         }
-
-        ///// <summary>
-        ///// Le um doczip e retorna um xml
-        ///// </summary>
-        ///// <param name="docZip">Dados compactados</param>
-        ///// <returns>Dados descompactados</returns>
-        //public static XmlDocument Decompress(this Meta.CTe.retDistDFeIntLoteDistDFeIntDocZip docZip)
-        //{
-        //    using var strStream = new MemoryStream();
-        //    strStream.Write(docZip.Value, 0, docZip.Value.Length);
-        //    strStream.Position = 0;
-        //    using Stream csStream = new System.IO.Compression.GZipStream(strStream, System.IO.Compression.CompressionMode.Decompress);
-
-        //    var xml = new XmlDocument();
-        //    xml.Load(csStream);
-        //    return xml;
-        //}
 
         /// <summary>
         /// Verifica se o xml está seguindo o schema xsd

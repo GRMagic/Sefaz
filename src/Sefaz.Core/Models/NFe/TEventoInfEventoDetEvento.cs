@@ -1,51 +1,49 @@
-﻿namespace Sefaz.Core.Meta
+﻿namespace Sefaz.Core.Models.NFe
 {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.3928.0")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://www.portalfiscal.inf.br/nfe")]
-    [System.Xml.Serialization.XmlRootAttribute("envEvento", Namespace = "http://www.portalfiscal.inf.br/nfe", IsNullable = false)]
-    public partial class TEnvEvento
+    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, Namespace = "http://www.portalfiscal.inf.br/nfe")]
+    public partial class TEventoInfEventoDetEvento
     {
 
-        private string idLoteField;
+        private TEventoInfEventoDetEventoDescEvento descEventoField;
 
-        private TEvento[] eventoField;
+        private string xJustField;
 
-        private string versaoField;
+        private TEventoInfEventoDetEventoVersao versaoField;
 
         /// <remarks/>
-        public string idLote
+        public TEventoInfEventoDetEventoDescEvento descEvento
         {
             get
             {
-                return this.idLoteField;
+                return this.descEventoField;
             }
             set
             {
-                this.idLoteField = value;
+                this.descEventoField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("evento")]
-        public TEvento[] evento
+        public string xJust
         {
             get
             {
-                return this.eventoField;
+                return this.xJustField;
             }
             set
             {
-                this.eventoField = value;
+                this.xJustField = value;
             }
         }
 
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public string versao
+        public TEventoInfEventoDetEventoVersao versao
         {
             get
             {

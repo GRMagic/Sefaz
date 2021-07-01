@@ -1,4 +1,4 @@
-﻿using Sefaz.Core.Meta;
+﻿using Sefaz.Core.Models.NFe;
 using System;
 using System.Threading.Tasks;
 
@@ -49,5 +49,16 @@ namespace Sefaz.Core
         /// <exception cref="SefazException">Pode lançar uma exceção caso o cStat tenha algum valor inesperado</exception>
         /// <remarks>O schema (xsd) não está sendo validado antes do envio</remarks>
         public Task ManifestarNFeAsync(string cnpj, string chave, TEventoInfEventoDetEventoDescEvento evento, int sequencia = 1, string justificativa = null);
+
+        /// <summary>
+        /// Chama o WS da SEFAZ para consultar os conhecimentos de transporte e eventos
+        /// </summary>
+        /// <param name="cUF">Código IBGE da UF da empresa</param>
+        /// <param name="cnpj">CNPJ do interessado</param>
+        /// <param name="ultimoNSU">NSU mais recente conhecido (Quando informado 0 retorna os conhecimentos dos últimos 90 dias)</param>
+        /// <param name="todosLotes">Consultar automaticamente todos os lotes até o mais atual?</param>
+        /// <returns>XML retornado pela Sefaz já deserializado em um objeto</returns>
+        /// <remarks>ATENÇÃO! Consultas grandes e frequentes podem causar bloqueio temporário do serviço. Evite usar ultimoNSU=0 mais de uma vez por hora.</remarks>
+        Task<ListaDocumentos> ConsultarCTeCNPJAsync(string cUF, string cnpj, long ultimoNSU = 0, bool todosLotes = true);
     }
 }
