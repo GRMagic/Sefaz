@@ -5,7 +5,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     
     <PackageId>rmdev.sefaz</PackageId>
-    <Version>1.3.0</Version>
+    <Version>1.3.1</Version>
     <License>MIT</License>
     <Authors>Gustavo Rossi Müller</Authors>
     <PackageDescription>Biblioteca para auxiliar no download de notas fiscais e conhecimentos de transporte</PackageDescription>
@@ -16,6 +16,7 @@
     <PackageTags>SEFAZ;NFE;CTE;Nota Fiscal;Conhecimento de Transporte</PackageTags>
     <Title>RM Dev - Sefaz</Title>
     <Summary>Faz o download de XMLs da Sefaz</Summary>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -30,6 +31,10 @@
     <PackageReference Include="System.ServiceModel.Security" Version="4.4.*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+    
   <ItemGroup>
     <WCFMetadata Include="Connected Services" />
   </ItemGroup>
