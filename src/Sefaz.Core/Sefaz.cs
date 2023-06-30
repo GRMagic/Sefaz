@@ -34,7 +34,7 @@ namespace Sefaz.Core
         public Models.NFe.TCOrgaoIBGE OrgaoManifesto { get; protected set; }
 
         /// <summary>
-        /// Constrói um objeto pasando o caminho e a senha de um certificado (A1)
+        /// Constrói um objeto passando o caminho e a senha de um certificado (A1)
         /// </summary>
         /// <param name="certificado">Caminho do certificado</param>
         /// <param name="senha">Senha do certificado</param>
