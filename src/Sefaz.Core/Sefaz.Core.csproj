@@ -16,6 +16,7 @@
     <PackageTags>SEFAZ;NFE;CTE;Nota Fiscal;Conhecimento de Transporte</PackageTags>
     <Title>RM Dev - Sefaz</Title>
     <Summary>Faz o download de XMLs da Sefaz</Summary>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -30,6 +31,10 @@
     <PackageReference Include="System.ServiceModel.Security" Version="4.4.*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+    
   <ItemGroup>
     <WCFMetadata Include="Connected Services" />
   </ItemGroup>
