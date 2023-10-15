@@ -1,4 +1,5 @@
-﻿using Sefaz.WCF.NFeDistribuicaoDFe;
+﻿using Sefaz.WCF.CTeRecepcaoEvento;
+using Sefaz.WCF.NFeDistribuicaoDFe;
 using Sefaz.WCF.NFeRecepcaoEvento4;
 using System;
 using System.IO;
@@ -34,7 +35,7 @@ namespace Sefaz.Core
         public Models.NFe.TCOrgaoIBGE OrgaoManifesto { get; protected set; }
 
         /// <summary>
-        /// Constrói um objeto pasando o caminho e a senha de um certificado (A1)
+        /// Constrói um objeto passando o caminho e a senha de um certificado (A1)
         /// </summary>
         /// <param name="certificado">Caminho do certificado</param>
         /// <param name="senha">Senha do certificado</param>
@@ -152,13 +153,7 @@ namespace Sefaz.Core
         [Obsolete("O nome dessa função mudou para ManifestarNFeAsync.", true)] 
         public Task ManifestarNFe(string cnpj, string chave, Models.NFe.TEventoInfEventoDetEventoDescEvento evento, int sequencia = 1, string justificativa = null) => ManifestarNFeAsync(cnpj, chave, evento, sequencia, justificativa);
 
-        /// <summary>
-        /// Chama o WS da Sefaz para baixar a NFe
-        /// </summary>
-        /// <param name="cUF">Código IBGE da UF</param>
-        /// <param name="cnpj">CNPJ</param>
-        /// <param name="chave">Chave da nota</param>
-        /// <returns>Documento retornado pela SEFAZ</returns>
+        /// <inheritdoc/>
         public async Task<Documento> BaixarNFeAsync(string cUF, string cnpj, string chave)
         {
             if (string.IsNullOrWhiteSpace(cUF)) throw new ArgumentNullException(nameof(cUF));
@@ -193,13 +188,7 @@ namespace Sefaz.Core
             }
         }
 
-        /// <summary>
-        /// Chama o WS de distribuição de NFe da Sefaz para consultar um NSU
-        /// </summary>
-        /// <param name="cUF">Código IBGE da UF</param>
-        /// <param name="cnpj">CNPJ do interessado</param>
-        /// <param name="nsu">Número sequencial único</param>
-        /// <returns>Documento retornado pela SEFAZ, não necessariamente uma NFe, pode ser algum evento por exemplo</returns>
+        /// <inheritdoc/>
         public async Task<Documento> ConsultarNFeNSUAsync(string cUF, string cnpj, long nsu)
         {
 
@@ -230,15 +219,7 @@ namespace Sefaz.Core
             };
         }
 
-        /// <summary>
-        /// Chama o WS da SEFAZ para consultar as notas e eventos de notas
-        /// </summary>
-        /// <param name="cUF">Código IBGE da UF da empresa</param>
-        /// <param name="cnpj">CNPJ do interessado</param>
-        /// <param name="ultimoNSU">NSU mais recente conhecido (Quando informado 0 retorna as notas dos últimos 90 dias)</param>
-        /// <param name="todosLotes">Consultar automaticamente todos os lotes até o mais atual?</param>
-        /// <returns>XML retornado pela Sefaz já deserializado em um objeto</returns>
-        /// <remarks>ATENÇÃO! Consultas grandes e frequentes podem causar bloqueio temporário do serviço. Evite usar ultimoNSU=0 mais de uma vez por hora.</remarks>
+        /// <inheritdoc/>
         public async Task<ListaDocumentos> ConsultarNFeCNPJAsync(string cUF, string cnpj, long ultimoNSU = 0, bool todosLotes = true)
         {
             if (string.IsNullOrWhiteSpace(cUF)) throw new ArgumentNullException(nameof(cUF));
@@ -290,16 +271,7 @@ namespace Sefaz.Core
             return lista;
         }
 
-        /// <summary>
-        /// Gera um evento de manifesto do destinatário
-        /// </summary>
-        /// <param name="cnpj">CNPJ do destinatário</param>
-        /// <param name="chave">Chave da NFe</param>
-        /// <param name="evento">Tipo de evento</param>
-        /// <param name="sequencia">Número sequencial usado para identificar a ordem que os eventos ocorreram</param>
-        /// <param name="justificativa">Justificativa caso necessária</param>
-        /// <exception cref="SefazException">Pode lançar uma exceção caso o cStat tenha algum valor inesperado</exception>
-        /// <remarks>O schema (xsd) não está sendo validado antes do envio</remarks>
+        /// <inheritdoc/>
         public async Task ManifestarNFeAsync(string cnpj, string chave, Models.NFe.TEventoInfEventoDetEventoDescEvento evento, int sequencia = 1, string justificativa = null)
         {
             if (string.IsNullOrWhiteSpace(cnpj)) throw new ArgumentNullException(nameof(cnpj));
@@ -458,15 +430,7 @@ namespace Sefaz.Core
             }
         }
 
-        /// <summary>
-        /// Chama o WS da SEFAZ para consultar os conhecimentos de transporte e eventos
-        /// </summary>
-        /// <param name="cUF">Código IBGE da UF da empresa</param>
-        /// <param name="cnpj">CNPJ do interessado</param>
-        /// <param name="ultimoNSU">NSU mais recente conhecido (Quando informado 0 retorna os conhecimentos dos últimos 90 dias)</param>
-        /// <param name="todosLotes">Consultar automaticamente todos os lotes até o mais atual?</param>
-        /// <returns>XML retornado pela Sefaz já deserializado em um objeto</returns>
-        /// <remarks>ATENÇÃO! Consultas grandes e frequentes podem causar bloqueio temporário do serviço. Evite usar ultimoNSU=0 mais de uma vez por hora.</remarks>
+        /// <inheritdoc/>
         public async Task<ListaDocumentos> ConsultarCTeCNPJAsync(string cUF, string cnpj, long ultimoNSU = 0, bool todosLotes = true)
         {
             if (string.IsNullOrWhiteSpace(cUF)) throw new ArgumentNullException(nameof(cUF));
@@ -516,6 +480,108 @@ namespace Sefaz.Core
             } while (todosLotes && lista.UltimoNSU < lista.NSUMaximo);
 
             return lista;
+        }
+
+        /// <inheritdoc/>
+        public async Task ManifestarDesacordoCTeAsync(string cnpj, string chave, string observacao, int sequencia = 1, string webservice = null)
+        {
+            if (string.IsNullOrWhiteSpace(cnpj)) throw new ArgumentNullException(nameof(cnpj));
+            if (cnpj.Length != 14) throw new ArgumentException("O CNPJ deve ter 14 algarismos.", nameof(cnpj));
+            if (string.IsNullOrWhiteSpace(chave)) throw new ArgumentNullException(nameof(chave));
+            if (chave.Length != 44) throw new ArgumentException("A chave deve ter 44 algarismos.", nameof(chave));
+            if (string.IsNullOrWhiteSpace(observacao)) throw new ArgumentNullException(nameof(observacao));
+            if (chave.Length < 15 || chave.Length > 255) throw new ArgumentException("A observação deve ter entre 15 e 255 caracteres.", nameof(observacao));
+            if (DateTime.UtcNow > _Certificado.NotAfter) throw new Exception($"O certificado venceu em {_Certificado.NotAfter}!");
+            if (DateTime.UtcNow < _Certificado.NotBefore) throw new Exception("O certificado ainda não é válido!");
+
+            var uf = chave[0..2];
+            var orgao = Enum.Parse<Models.CTe.PL_CTe_400.TCOrgaoIBGE>("Item" + uf);
+
+            // Configuração do ws
+            var endereco = webservice ?? WsCteRecepcaoEvento.ResourceManager.GetString(uf);
+            if (string.IsNullOrWhiteSpace(endereco)) throw new ArgumentNullException(nameof(webservice));
+            var endpoint = new System.ServiceModel.EndpointAddress(endereco);
+            var binding = new System.ServiceModel.Channels.CustomBinding();
+            binding.Elements.Add(new System.ServiceModel.Channels.TextMessageEncodingBindingElement() { MessageVersion = System.ServiceModel.Channels.MessageVersion.CreateVersion(System.ServiceModel.EnvelopeVersion.Soap12, System.ServiceModel.Channels.AddressingVersion.None) });
+            binding.Elements.Add(new System.ServiceModel.Channels.HttpsTransportBindingElement() { RequireClientCertificate = true, AuthenticationScheme = System.Net.AuthenticationSchemes.Digest });
+
+            // Instância do cliente
+            var ws = new CteRecepcaoEventoSoap12Client(binding, endpoint);
+            
+            // Definição do certificado
+            ws.ClientCredentials.ClientCertificate.Certificate = _Certificado;
+            
+            // Dados
+            string nSeqEvento = sequencia.ToString();
+            string tpEvento = "610110";
+            string id = "ID" + tpEvento + chave + nSeqEvento.PadLeft(2, '0');
+            var versao = "3.00";
+            var dados = new Models.CTe.PL_CTe_400.TEvento
+            {
+                versao = versao,
+                infEvento = new Models.CTe.PL_CTe_400.TEventoInfEvento
+                {
+                    Id = id,
+                    cOrgao = orgao,
+                    tpAmb = _Ambiente,
+                    Item = cnpj,
+                    ItemElementName = cnpj.Length > 11 ? Models.CTe.TipoPessoa.CNPJ : Models.CTe.TipoPessoa.CPF,
+                    chCTe = chave,
+                    dhEvento = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:sszzz"),
+                    tpEvento = tpEvento,
+                    nSeqEvento = nSeqEvento,
+                    detEvento = new Models.CTe.PL_CTe_400.TEventoInfEventoDetEvento
+                    {
+                        versaoEvento = versao,
+                        Any = null
+                    }
+                },
+            };
+
+            var evento = new Models.CTe.PL_CTe_400.evPrestDesacordo
+            {
+                descEvento = Models.CTe.PL_CTe_400.evPrestDesacordoDescEvento.PrestacaodoServicoemDesacordo,
+                indDesacordoOper = Models.CTe.PL_CTe_400.evPrestDesacordoIndDesacordoOper.Item1,
+                xObs = observacao
+            };
+
+            // Colocar evPrestDesacordo dentro do detEvento
+            var evPrestDesacordoXml = new XmlDocument();
+            using (var memoryStream = new MemoryStream())
+            {
+                using var streamWriter = new StreamWriter(memoryStream);
+                var ns = new XmlSerializerNamespaces();
+                ns.Add("", "http://www.portalfiscal.inf.br/cte");
+                new XmlSerializer(evento.GetType()).Serialize(streamWriter, evento, ns);
+                evPrestDesacordoXml.LoadXml(Encoding.UTF8.GetString(memoryStream.ToArray()));
+            }
+            dados.infEvento.detEvento.Any = evPrestDesacordoXml.DocumentElement;
+
+            // Gerar XML
+            var xml = new XmlDocument();
+            using (var memoryStream = new MemoryStream())
+            {
+                using var streamWriter = new StreamWriter(memoryStream);
+                XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+                ns.Add("", "http://www.portalfiscal.inf.br/cte");
+                new XmlSerializer(dados.GetType()).Serialize(streamWriter, dados, ns);
+                xml.LoadXml(Encoding.UTF8.GetString(memoryStream.ToArray()));
+            }
+
+            xml = Util.AssinarXML(xml, _Certificado, "infEvento");
+
+            var cabecalho = new cteCabecMsg()
+            {
+                cUF = uf,
+                versaoDados = versao
+            };
+
+            // Chama o web service;
+            var resposta = await ws.cteRecepcaoEventoAsync(cabecalho, xml);
+
+            // Trabalha com a resposta
+            var retorno = resposta.cteRecepcaoEventoResult.DeserializeTo<Models.CTe.PL_CTe_400.TRetEvento>();
+            if (retorno.infEvento.cStat != "135") throw new SefazException(retorno.infEvento.cStat, retorno.infEvento.xMotivo);
         }
 
         /// <summary>
@@ -582,4 +648,5 @@ namespace Sefaz.Core
                 _Certificado?.Dispose();
         }
     }
+
 }
