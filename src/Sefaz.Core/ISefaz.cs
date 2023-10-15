@@ -39,7 +39,7 @@ namespace Sefaz.Core
         public Task<ListaDocumentos> ConsultarNFeCNPJAsync(string cUF, string cnpj, long ultimoNSU = 0, bool todosLotes = true);
 
         /// <summary>
-        /// Gera um evento de manifesto do destinatário
+        /// Gera um evento de manifesto do destinatário para a NFe
         /// </summary>
         /// <param name="cnpj">CNPJ do destinatário</param>
         /// <param name="chave">Chave da NFe</param>
@@ -60,5 +60,18 @@ namespace Sefaz.Core
         /// <returns>XML retornado pela Sefaz já deserializado em um objeto</returns>
         /// <remarks>ATENÇÃO! Consultas grandes e frequentes podem causar bloqueio temporário do serviço. Evite usar ultimoNSU=0 mais de uma vez por hora.</remarks>
         Task<ListaDocumentos> ConsultarCTeCNPJAsync(string cUF, string cnpj, long ultimoNSU = 0, bool todosLotes = true);
+
+        /// <summary>
+        /// Gera um evento de 'Prestação do Serviço em Desacordo' para a CTe
+        /// </summary>
+        /// <param name="cnpj">CNPJ do destinatário</param>
+        /// <param name="chave">Chave da Cte</param>
+        /// <param name="sequencia">Número sequencial usado para identificar a ordem que os eventos ocorreram</param>
+        /// <param name="observacao">Justificativa caso necessária</param>
+        /// <param name="webservice">Endereço do webservice CteRecepcaoEvento</param>
+        /// <exception cref="SefazException">Pode lançar uma exceção caso o cStat tenha algum valor inesperado</exception>
+        /// <remarks>O schema (xsd) não está sendo validado antes do envio</remarks>
+        public Task ManifestarDesacordoCTeAsync(string cnpj, string chave, string observacao, int sequencia = 1, string webservice = null);
+
     }
 }

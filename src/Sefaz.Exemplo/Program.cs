@@ -39,8 +39,8 @@ namespace Sefaz.Exemplo
 
             // Busca os útimos 90 dias
             var documentos = await sefaz.ConsultarNFeCNPJAsync(cUF, cnpj);
-            
-            foreach(var documento in documentos)
+
+            foreach (var documento in documentos)
             {
                 documento.SalvarArquivo($@"{pasta}{documento.NSU}.xml");
             }
@@ -53,6 +53,11 @@ namespace Sefaz.Exemplo
 
             // Busca os útimos 90 dias
             documentos = await sefaz.ConsultarCTeCNPJAsync(cUF, cnpj);
+
+            // -------------- Manifestar desacordo por parte do destinatário --------------
+
+            var chaveCTe = "31230935912340000173570010000002461000000003";
+            await sefaz.ManifestarDesacordoCTeAsync(cnpj, chaveCTe, "Alguma justificativa");
         }
     }
 }

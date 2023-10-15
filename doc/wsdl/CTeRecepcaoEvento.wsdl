@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.portalfiscal.inf.br/cte/wsdl/CteRecepcaoEvento" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://www.portalfiscal.inf.br/cte/wsdl/CteRecepcaoEvento" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.portalfiscal.inf.br/cte/wsdl/CteRecepcaoEvento">
+      <s:element name="cteDadosMsg">
+        <s:complexType mixed="true">
+          <s:sequence>
+            <s:any />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="cteRecepcaoEventoResult">
+        <s:complexType mixed="true">
+          <s:sequence>
+            <s:any />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="cteCabecMsg" type="tns:cteCabecMsg" />
+      <s:complexType name="cteCabecMsg">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="cUF" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="versaoDados" type="s:string" />
+        </s:sequence>
+        <s:anyAttribute />
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="cteRecepcaoEventoSoap12In">
+    <wsdl:part name="cteDadosMsg" element="tns:cteDadosMsg" />
+  </wsdl:message>
+  <wsdl:message name="cteRecepcaoEventoSoap12Out">
+    <wsdl:part name="cteRecepcaoEventoResult" element="tns:cteRecepcaoEventoResult" />
+  </wsdl:message>
+  <wsdl:message name="cteRecepcaoEventocteCabecMsg">
+    <wsdl:part name="cteCabecMsg" element="tns:cteCabecMsg" />
+  </wsdl:message>
+  <wsdl:portType name="CteRecepcaoEventoSoap12">
+    <wsdl:operation name="cteRecepcaoEvento">
+      <wsdl:input message="tns:cteRecepcaoEventoSoap12In" />
+      <wsdl:output message="tns:cteRecepcaoEventoSoap12Out" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="CteRecepcaoEventoSoap12" type="tns:CteRecepcaoEventoSoap12">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="cteRecepcaoEvento">
+      <soap12:operation soapAction="http://www.portalfiscal.inf.br/cte/wsdl/CteRecepcaoEvento/cteRecepcaoEvento" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:cteRecepcaoEventocteCabecMsg" part="cteCabecMsg" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+        <soap12:header message="tns:cteRecepcaoEventocteCabecMsg" part="cteCabecMsg" use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="CteRecepcaoEvento">
+    <wsdl:port name="CteRecepcaoEventoSoap12" binding="tns:CteRecepcaoEventoSoap12">
+      <soap12:address location="https://cte.svrs.rs.gov.br/ws/cterecepcaoevento/cterecepcaoevento.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
