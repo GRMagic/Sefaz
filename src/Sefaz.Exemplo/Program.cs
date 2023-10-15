@@ -56,7 +56,7 @@ namespace Sefaz.Exemplo
 
             // -------------- Manifestar desacordo por parte do destinatário --------------
 
-            var chaveCTe = "31230935912340000173570010000002461000000003";
+            var chaveCTe = "12345678901234567890123456789012345678901234";
             await sefaz.ManifestarDesacordoCTeAsync(cnpj, chaveCTe, "Alguma justificativa");
         }
     }
