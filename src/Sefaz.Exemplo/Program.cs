@@ -17,6 +17,9 @@ namespace Sefaz.Exemplo
             // Criando uma instância para uso em PRODUÇÃO
             using var sefaz = new Sefaz.Core.Sefaz(caminhoCertificado, senhaCertificado);
 
+            // Criando uma instância para uso em HOMOLOGAÇÃO
+            // using var sefaz = new Sefaz.Core.Sefaz(caminhoCertificado, senhaCertificado, Core.Models.NFe.TAmb.Homologacao);
+
             // Chave da nota que vamos baixar
             var chaveNFe = "12345678901234567890123456789012345678901234";
 
