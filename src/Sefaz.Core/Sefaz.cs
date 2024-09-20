@@ -177,7 +177,7 @@ namespace Sefaz.Core
                 var nota = retorno.loteDistDFeInt.docZip.FirstOrDefault(d => d.schema.StartsWith("procNFe_"));
                 return new Documento
                 {
-                    NSU = long.Parse(nota.NSU),
+                    NSU = long.TryParse(nota.NSU, out var nsuRetornado) ? (long?)nsuRetornado : null,
                     Schema = nota.schema,
                     Xml = nota.Decompress()
                 };
@@ -213,7 +213,7 @@ namespace Sefaz.Core
 
             return new Documento
             {
-                NSU = long.Parse(doc.NSU),
+                NSU = long.TryParse(doc.NSU, out var nsuRetornado) ? (long?)nsuRetornado : null,
                 Schema = doc.schema,
                 Xml = doc.Decompress()
             };
@@ -254,7 +254,7 @@ namespace Sefaz.Core
                         {
                             var documento = new Documento()
                             {
-                                NSU = long.Parse(docZip.NSU),
+                                NSU = long.TryParse(docZip.NSU, out var nsuRetornado) ? (long?)nsuRetornado : null,
                                 Schema = docZip.schema,
                                 Xml = docZip.Decompress()
                             };
@@ -465,7 +465,7 @@ namespace Sefaz.Core
                         {
                             var documento = new Documento()
                             {
-                                NSU = long.Parse(docZip.NSU),
+                                NSU = long.TryParse(docZip.NSU, out var nsuRetornado) ? (long?)nsuRetornado : null,
                                 Schema = docZip.schema,
                                 Xml = docZip.Decompress()
                             };
