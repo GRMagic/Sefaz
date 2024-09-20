@@ -27,3 +27,7 @@ doc.SalvarArquivo("arquivo.xml");
 var documentos = await sefaz.ConsultarNFeCNPJAsync(cUF, cnpj);
 ```
 Mais exemplos em https://github.com/GRMagic/Sefaz/blob/main/src/Sefaz.Exemplo/Program.cs
+
+## Notas Importantes de Versão
+
+Na versão 1.4 desse pacote o campo NSU do Documento retornado pela Sefaz se tornou nullable!
