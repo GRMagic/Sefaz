@@ -1,6 +1,4 @@
-﻿{
-  "ProviderId": "Microsoft.VisualStudio.ConnectedService.Wcf",
-  "Version": "15.0.40203.910",
+{
   "ExtendedData": {
     "inputs": [
       "../../../../doc/wsdl/NFeDistribuicaoDFe.wsdl"
@@ -14,12 +12,24 @@
       "*, Sefaz.WCF.NFeDistribuicaoDFe"
     ],
     "references": [
-      "System.ServiceModel, {System.ServiceModel.Primitives, 4.4.4}",
-      "System.ServiceModel.Duplex, {System.ServiceModel.Duplex, 4.4.4}",
-      "System.ServiceModel.Http, {System.ServiceModel.Http, 4.4.4}",
-      "System.ServiceModel.NetTcp, {System.ServiceModel.NetTcp, 4.4.4}",
-      "System.ServiceModel.Primitives, {System.ServiceModel.Primitives, 4.4.4}",
-      "System.ServiceModel.Security, {System.ServiceModel.Security, 4.4.4}"
+      "Microsoft.Bcl.AsyncInterfaces, {Microsoft.Bcl.AsyncInterfaces, 5.0.0}",
+      "Microsoft.Extensions.ObjectPool, {Microsoft.Extensions.ObjectPool, 5.0.10}",
+      "System.Buffers, {System.Buffers, 4.5.1}",
+      "System.Formats.Asn1, {System.Formats.Asn1, 8.0.1}",
+      "System.Memory, {System.Memory, 4.5.5}",
+      "System.Numerics.Vectors, {System.Numerics.Vectors, 4.5.0}",
+      "System.Reflection.DispatchProxy, {System.Reflection.DispatchProxy, 4.7.1}",
+      "System.Runtime.CompilerServices.Unsafe, {System.Runtime.CompilerServices.Unsafe, 4.5.3}",
+      "System.Security.AccessControl, {System.Security.AccessControl, 6.0.0}",
+      "System.Security.Cryptography.Cng, {System.Security.Cryptography.Cng, 5.0.0}",
+      "System.Security.Cryptography.Pkcs, {System.Security.Cryptography.Pkcs, 8.0.1}",
+      "System.Security.Cryptography.Xml, {System.Security.Cryptography.Xml, 8.0.2}",
+      "System.Security.Principal.Windows, {System.Security.Principal.Windows, 5.0.0}",
+      "System.ServiceModel.Duplex, {System.ServiceModel.Duplex, 4.10.3}",
+      "System.ServiceModel.Http, {System.ServiceModel.Http, 8.1.2}",
+      "System.ServiceModel.NetTcp, {System.ServiceModel.NetTcp, 8.1.2}",
+      "System.ServiceModel.Primitives, {System.ServiceModel.Primitives, 8.1.2}",
+      "System.ServiceModel.Security, {System.ServiceModel.Primitives, 8.1.2}"
     ],
     "targetFramework": "netstandard2.1",
     "typeReuseMode": "All"

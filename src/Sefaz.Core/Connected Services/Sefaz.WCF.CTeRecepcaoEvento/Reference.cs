@@ -11,7 +11,7 @@ namespace Sefaz.WCF.CTeRecepcaoEvento
 {
     
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.2.0-preview1.23462.5")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="http://www.portalfiscal.inf.br/cte/wsdl/CteRecepcaoEvento", ConfigurationName="Sefaz.WCF.CTeRecepcaoEvento.CteRecepcaoEventoSoap12")]
     internal interface CteRecepcaoEventoSoap12
     {
@@ -22,7 +22,7 @@ namespace Sefaz.WCF.CTeRecepcaoEvento
     }
     
     /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.2.0-preview1.23462.5")]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://www.portalfiscal.inf.br/cte/wsdl/CteRecepcaoEvento")]
     public partial class cteCabecMsg
@@ -62,7 +62,7 @@ namespace Sefaz.WCF.CTeRecepcaoEvento
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.2.0-preview1.23462.5")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     internal partial class cteRecepcaoEventoRequest
@@ -86,7 +86,7 @@ namespace Sefaz.WCF.CTeRecepcaoEvento
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.2.0-preview1.23462.5")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     internal partial class cteRecepcaoEventoResponse
@@ -109,13 +109,13 @@ namespace Sefaz.WCF.CTeRecepcaoEvento
         }
     }
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.2.0-preview1.23462.5")]
     internal interface CteRecepcaoEventoSoap12Channel : Sefaz.WCF.CTeRecepcaoEvento.CteRecepcaoEventoSoap12, System.ServiceModel.IClientChannel
     {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.1.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.2.0-preview1.23462.5")]
     internal partial class CteRecepcaoEventoSoap12Client : System.ServiceModel.ClientBase<Sefaz.WCF.CTeRecepcaoEvento.CteRecepcaoEventoSoap12>, Sefaz.WCF.CTeRecepcaoEvento.CteRecepcaoEventoSoap12
     {
         

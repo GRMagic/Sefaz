@@ -11,7 +11,7 @@ namespace Sefaz.WCF.NFeRecepcaoEvento4
 {
     
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.2.0-preview1.23462.5")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="http://www.portalfiscal.inf.br/nfe/wsdl/NFeRecepcaoEvento4", ConfigurationName="Sefaz.WCF.NFeRecepcaoEvento4.NFeRecepcaoEvento4Soap")]
     internal interface NFeRecepcaoEvento4Soap
     {
@@ -22,7 +22,7 @@ namespace Sefaz.WCF.NFeRecepcaoEvento4
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.2.0-preview1.23462.5")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     internal partial class nfeRecepcaoEventoNFRequest
@@ -42,7 +42,7 @@ namespace Sefaz.WCF.NFeRecepcaoEvento4
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.2.0-preview1.23462.5")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
     internal partial class nfeRecepcaoEventoNFResponse
@@ -61,13 +61,13 @@ namespace Sefaz.WCF.NFeRecepcaoEvento4
         }
     }
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.2.0-preview1.23462.5")]
     internal interface NFeRecepcaoEvento4SoapChannel : Sefaz.WCF.NFeRecepcaoEvento4.NFeRecepcaoEvento4Soap, System.ServiceModel.IClientChannel
     {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.0.2")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.Tools.ServiceModel.Svcutil", "2.2.0-preview1.23462.5")]
     internal partial class NFeRecepcaoEvento4SoapClient : System.ServiceModel.ClientBase<Sefaz.WCF.NFeRecepcaoEvento4.NFeRecepcaoEvento4Soap>, Sefaz.WCF.NFeRecepcaoEvento4.NFeRecepcaoEvento4Soap
     {
         
