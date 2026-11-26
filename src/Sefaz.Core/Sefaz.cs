@@ -490,7 +490,7 @@ namespace Sefaz.Core
             if (string.IsNullOrWhiteSpace(chave)) throw new ArgumentNullException(nameof(chave));
             if (chave.Length != 44) throw new ArgumentException("A chave deve ter 44 algarismos.", nameof(chave));
             if (string.IsNullOrWhiteSpace(observacao)) throw new ArgumentNullException(nameof(observacao));
-            if (chave.Length < 15 || chave.Length > 255) throw new ArgumentException("A observação deve ter entre 15 e 255 caracteres.", nameof(observacao));
+            if (observacao.Length < 15 || observacao.Length > 255) throw new ArgumentException("A observação deve ter entre 15 e 255 caracteres.", nameof(observacao));
             if (DateTime.UtcNow > _Certificado.NotAfter) throw new Exception($"O certificado venceu em {_Certificado.NotAfter}!");
             if (DateTime.UtcNow < _Certificado.NotBefore) throw new Exception("O certificado ainda não é válido!");
 
