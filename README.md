@@ -31,3 +31,5 @@ Mais exemplos em https://github.com/GRMagic/Sefaz/blob/main/src/Sefaz.Exemplo/Pr
 ## Notas Importantes de Versão
 
 Na versão 1.4 desse pacote o campo NSU do Documento retornado pela Sefaz se tornou nullable!
+
+Na versão 1.5 os pacotes `System.ServiceModel.Duplex`, `System.ServiceModel.NetTcp` e `System.ServiceModel.Security` deixaram de ser dependências, porque a biblioteca não os usa. Se o seu projeto usa tipos desses pacotes, adicione uma referência direta a eles.
