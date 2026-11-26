@@ -1,0 +1,53 @@
+POST /CTeRecepcaoEvento/CTeRecepcaoEvento.asmx
+Enquadramento HTTP: Content-Length
+SOAP 1.2
+Content-Type: application/soap+xml; charset=utf-8
+SOAPAction: (ausente)
+
+Cabeçalho SOAP:
+<cteCabecMsg xmlns="http://www.portalfiscal.inf.br/cte/wsdl/CteRecepcaoEvento">
+  <cUF>43</cUF>
+  <versaoDados>3.00</versaoDados>
+</cteCabecMsg>
+
+Corpo SOAP:
+<cteDadosMsg xmlns="http://www.portalfiscal.inf.br/cte/wsdl/CteRecepcaoEvento">
+  <eventoCTe versao="3.00" xmlns="http://www.portalfiscal.inf.br/cte">
+    <infEvento Id="ID6101104326111234567800019557001000000001100000001701">
+      <cOrgao>43</cOrgao>
+      <tpAmb>2</tpAmb>
+      <CNPJ>12345678000195</CNPJ>
+      <chCTe>43261112345678000195570010000000011000000017</chCTe>
+      <dhEvento>{dhEvento}</dhEvento>
+      <tpEvento>610110</tpEvento>
+      <nSeqEvento>1</nSeqEvento>
+      <detEvento versaoEvento="3.00">
+        <evPrestDesacordo>
+          <descEvento>Prestacao do Servico em Desacordo</descEvento>
+          <indDesacordoOper>1</indDesacordoOper>
+          <xObs>Mercadoria entregue com avaria, não conforme o pedido</xObs>
+        </evPrestDesacordo>
+      </detEvento>
+    </infEvento>
+    <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+      <SignedInfo>
+        <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" />
+        <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
+        <Reference URI="#ID6101104326111234567800019557001000000001100000001701">
+          <Transforms>
+            <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
+            <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" />
+          </Transforms>
+          <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+          <DigestValue>{DigestValue}</DigestValue>
+        </Reference>
+      </SignedInfo>
+      <SignatureValue>{SignatureValue}</SignatureValue>
+      <KeyInfo>
+        <X509Data>
+          <X509Certificate>{X509Certificate}</X509Certificate>
+        </X509Data>
+      </KeyInfo>
+    </Signature>
+  </eventoCTe>
+</cteDadosMsg>

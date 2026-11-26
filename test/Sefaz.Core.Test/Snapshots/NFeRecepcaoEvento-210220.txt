@@ -1,0 +1,50 @@
+POST /NFeRecepcaoEvento4/NFeRecepcaoEvento4.asmx
+Enquadramento HTTP: Content-Length
+SOAP 1.1
+Content-Type: text/xml; charset=utf-8
+SOAPAction: http://www.portalfiscal.inf.br/nfe/wsdl/NFeRecepcaoEvento4/nfeRecepcaoEventoNF
+
+Cabeçalho SOAP:
+(vazio)
+
+Corpo SOAP:
+<nfeDadosMsg xmlns="http://www.portalfiscal.inf.br/nfe/wsdl/NFeRecepcaoEvento4">
+  <envEvento versao="1.00" xmlns="http://www.portalfiscal.inf.br/nfe">
+    <idLote>000000000000001</idLote>
+    <evento versao="1.00">
+      <infEvento Id="ID2102204326111234567800019555001000000001100000001401">
+        <cOrgao>91</cOrgao>
+        <tpAmb>2</tpAmb>
+        <CNPJ>12345678000195</CNPJ>
+        <chNFe>43261112345678000195550010000000011000000014</chNFe>
+        <dhEvento>{dhEvento}</dhEvento>
+        <tpEvento>210220</tpEvento>
+        <nSeqEvento>1</nSeqEvento>
+        <verEvento>1.00</verEvento>
+        <detEvento versao="1.00">
+          <descEvento>Desconhecimento da Operacao</descEvento>
+        </detEvento>
+      </infEvento>
+      <Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+        <SignedInfo>
+          <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" />
+          <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
+          <Reference URI="#ID2102204326111234567800019555001000000001100000001401">
+            <Transforms>
+              <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
+              <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315" />
+            </Transforms>
+            <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+            <DigestValue>{DigestValue}</DigestValue>
+          </Reference>
+        </SignedInfo>
+        <SignatureValue>{SignatureValue}</SignatureValue>
+        <KeyInfo>
+          <X509Data>
+            <X509Certificate>{X509Certificate}</X509Certificate>
+          </X509Data>
+        </KeyInfo>
+      </Signature>
+    </evento>
+  </envEvento>
+</nfeDadosMsg>

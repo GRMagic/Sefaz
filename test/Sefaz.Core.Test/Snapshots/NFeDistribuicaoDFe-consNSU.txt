@@ -1,0 +1,22 @@
+POST /NFeDistribuicaoDFe/NFeDistribuicaoDFe.asmx
+Enquadramento HTTP: Content-Length
+SOAP 1.1
+Content-Type: text/xml; charset=utf-8
+SOAPAction: http://www.portalfiscal.inf.br/nfe/wsdl/NFeDistribuicaoDFe/nfeDistDFeInteresse
+
+Cabeçalho SOAP:
+(vazio)
+
+Corpo SOAP:
+<nfeDistDFeInteresse xmlns="http://www.portalfiscal.inf.br/nfe/wsdl/NFeDistribuicaoDFe">
+  <nfeDadosMsg>
+    <distDFeInt versao="1.01" xmlns="http://www.portalfiscal.inf.br/nfe">
+      <tpAmb>2</tpAmb>
+      <cUFAutor>43</cUFAutor>
+      <CNPJ>12345678000195</CNPJ>
+      <consNSU>
+        <NSU>000000000001234</NSU>
+      </consNSU>
+    </distDFeInt>
+  </nfeDadosMsg>
+</nfeDistDFeInteresse>

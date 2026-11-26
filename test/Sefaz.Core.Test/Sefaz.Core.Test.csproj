@@ -24,9 +24,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Kestrel para a SEFAZ simulada (só no projeto de testes, não vai no pacote) -->
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="test.pfx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <!-- XSDs oficiais usados para validar o que a SEFAZ simulada recebe e responde -->
+    <None Include="..\..\doc\XSDs\**\*.xsd" Link="XSDs\%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>
