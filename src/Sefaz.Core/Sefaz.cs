@@ -30,6 +30,15 @@ namespace Sefaz.Core
         private bool _DisposeCertificado;
 
         /// <summary>
+        /// Quando definido, é o único certificado de servidor aceito, no lugar da validação do sistema operacional
+        /// </summary>
+        /// <remarks>
+        /// Uso interno, só para os testes com a SEFAZ simulada (o WCF só confia no repositório do sistema).
+        /// Quando nulo, que é o padrão, vale a validação normal do sistema operacional.
+        /// </remarks>
+        internal X509Certificate2 CertificadoServidorConfiavel { get; set; }
+
+        /// <summary>
         /// Código IBGE do orgão que irá recepcionar os eventos de manifesto do destinatário
         /// </summary>
         public Models.NFe.TCOrgaoIBGE OrgaoManifesto { get; protected set; }
@@ -290,7 +299,7 @@ namespace Sefaz.Core
             var ws = new NFeRecepcaoEvento4SoapClient(binding, endpoint);
 
             // Definição do certificado
-            ws.ClientCredentials.ClientCertificate.Certificate = _Certificado;
+            ConfigurarCredenciais(ws.ClientCredentials);
 
             // Dados
             Models.NFe.TEventoInfEventoTpEvento tpEvento;
@@ -396,7 +405,7 @@ namespace Sefaz.Core
             try
             {
                 // Definição do certificado
-                ws.ClientCredentials.ClientCertificate.Certificate = _Certificado;
+                ConfigurarCredenciais(ws.ClientCredentials);
 
                 // Dados
                 Models.NFe.TCodUfIBGE eUF;
@@ -509,7 +518,7 @@ namespace Sefaz.Core
             var ws = new CteRecepcaoEventoSoap12Client(binding, endpoint);
             
             // Definição do certificado
-            ws.ClientCredentials.ClientCertificate.Certificate = _Certificado;
+            ConfigurarCredenciais(ws.ClientCredentials);
             
             // Dados
             string nSeqEvento = sequencia.ToString();
@@ -606,7 +615,7 @@ namespace Sefaz.Core
             try
             {
                 // Definição do certificado
-                ws.ClientCredentials.ClientCertificate.Certificate = _Certificado;
+                ConfigurarCredenciais(ws.ClientCredentials);
 
                 // Dados
                 Models.CTe.TCodUfIBGE eUF;
@@ -636,6 +645,41 @@ namespace Sefaz.Core
             finally
             {
                 await ws.CloseAsync();
+            }
+        }
+
+        /// <summary>
+        /// Define o certificado de cliente e, quando houver, a confiança no <see cref="CertificadoServidorConfiavel"/>
+        /// </summary>
+        /// <param name="credenciais">Credenciais do cliente WCF</param>
+        private void ConfigurarCredenciais(System.ServiceModel.Description.ClientCredentials credenciais)
+        {
+            credenciais.ClientCertificate.Certificate = _Certificado;
+
+            if (CertificadoServidorConfiavel != null)
+            {
+                credenciais.ServiceCertificate.SslCertificateAuthentication = new System.ServiceModel.Security.X509ServiceCertificateAuthentication
+                {
+                    CertificateValidationMode = System.ServiceModel.Security.X509CertificateValidationMode.Custom,
+                    CustomCertificateValidator = new ValidadorCertificadoServidor(CertificadoServidorConfiavel)
+                };
+            }
+        }
+
+        /// <summary>
+        /// Aceita somente o certificado de servidor informado
+        /// </summary>
+        private sealed class ValidadorCertificadoServidor : System.IdentityModel.Selectors.X509CertificateValidator
+        {
+            private readonly byte[] _Certificado;
+
+            public ValidadorCertificadoServidor(X509Certificate2 confiavel) => _Certificado = confiavel.RawData;
+
+            public override void Validate(X509Certificate2 certificate)
+            {
+                // Compara o certificado inteiro, e não só o thumbprint (SHA-1)
+                if (certificate == null || !certificate.RawData.AsSpan().SequenceEqual(_Certificado))
+                    throw new System.Security.Authentication.AuthenticationException("O certificado do servidor não é o certificado confiável configurado.");
             }
         }
 

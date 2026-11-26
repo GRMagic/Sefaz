@@ -29,6 +29,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Os testes com a SEFAZ simulada usam a propriedade interna CertificadoServidorConfiavel -->
+    <InternalsVisibleTo Include="Sefaz.Core.Test" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="..\..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
     
