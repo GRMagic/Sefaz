@@ -1,0 +1,2 @@
+# Usado dentro de containers Linux pelos testes de compatibilidade
+test/Compatibilidade/Dockerfile text eol=lf

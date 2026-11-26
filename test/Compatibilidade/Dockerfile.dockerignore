@@ -1,0 +1,6 @@
+*
+!README.md
+!src/Sefaz.Core/
+!test/Compatibilidade/Consumidor/
+**/bin/
+**/obj/
