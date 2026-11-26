@@ -32,4 +32,7 @@ Mais exemplos em https://github.com/GRMagic/Sefaz/blob/main/src/Sefaz.Exemplo/Pr
 
 Na versão 1.4 desse pacote o campo NSU do Documento retornado pela Sefaz se tornou nullable!
 
-Na versão 1.5 os pacotes `System.ServiceModel.Duplex`, `System.ServiceModel.NetTcp` e `System.ServiceModel.Security` deixaram de ser dependências, porque a biblioteca não os usa. Se o seu projeto usa tipos desses pacotes, adicione uma referência direta a eles.
+Na versão 1.5:
+- Os pacotes `System.ServiceModel.Duplex`, `System.ServiceModel.NetTcp` e `System.ServiceModel.Security` deixaram de ser dependências, porque a biblioteca não os usa. Se o seu projeto usa tipos desses pacotes, adicione uma referência direta a eles.
+- A versão mínima do `System.Security.Cryptography.Xml` passou a ser a 8.0.5, a primeira sem vulnerabilidades conhecidas. Se o seu projeto referencia uma versão menor diretamente, o build vai acusar NU1605 até você atualizá-la.
+- Se o seu projeto usa WCF 6 ou mais novo (`System.ServiceModel.Primitives`, `NetTcp` etc.), referencie também o `System.ServiceModel.Http` na mesma versão. Sem isso, os pacotes WCF novos se misturam com os 4.x usados por esta biblioteca e as chamadas falham em tempo de execução.

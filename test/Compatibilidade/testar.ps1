@@ -6,7 +6,8 @@
     Em cada cenário, o Dockerfile gera o .nupkg a partir do código atual e o consome num projeto novo, com o
     SDK/runtime do cenário e, opcionalmente, com versões próprias das dependências (simulando quem já usa outras
     versões delas). O build do consumidor trata avisos como erros, então falha com conflito de versão
-    (NU1605/NU1608), vulnerabilidade conhecida (NU190x) ou aviso de framework sem suporte. Depois, o consumidor
+    (NU1605/NU1608), vulnerabilidade conhecida (NU190x) ou aviso de framework sem suporte. A auditoria de
+    vulnerabilidades só existe a partir do SDK 8, então não roda no cenário net6.0. Depois, o consumidor
     executa a assinatura de XML e as chamadas WCF contra uma porta local fechada.
 
     Requer Docker com containers Linux. Os logs de cada cenário ficam na pasta temporária do sistema.
@@ -18,6 +19,7 @@
     pwsh test/Compatibilidade/testar.ps1
     pwsh test/Compatibilidade/testar.ps1 -Cenario "net10.0"
 #>
+#Requires -Version 7
 param([string[]] $Cenario)
 
 $ErrorActionPreference = 'Stop'
@@ -32,6 +34,7 @@ New-Item -ItemType Directory -Force $pastaLogs | Out-Null
 $cenarios = @(
     @{ Nome = 'net6.0';                                  Sdk = '6.0';  Tfm = 'net6.0';  Extras = '' }
     @{ Nome = 'net8.0';                                  Sdk = '8.0';  Tfm = 'net8.0';  Extras = '' }
+    @{ Nome = 'net8.0 com WCF 4.8.1';                    Sdk = '8.0';  Tfm = 'net8.0';  Extras = 'System.ServiceModel.Http@4.8.1' }
     @{ Nome = 'net8.0 com WCF 6.2.0';                    Sdk = '8.0';  Tfm = 'net8.0';  Extras = 'System.ServiceModel.Http@6.2.0' }
     @{ Nome = 'net8.0 com WCF 8.1.2';                    Sdk = '8.0';  Tfm = 'net8.0';  Extras = 'System.ServiceModel.Http@8.1.2' }
     @{ Nome = 'net8.0 com Cryptography.Xml 10.x';        Sdk = '8.0';  Tfm = 'net8.0';  Extras = 'System.Security.Cryptography.Xml@10.0.15' }
@@ -41,6 +44,7 @@ $cenarios = @(
 
 if ($Cenario) {
     $cenarios = @($cenarios | Where-Object { $nome = $_.Nome; $Cenario | Where-Object { $nome -like "*$_*" } })
+    if ($cenarios.Count -eq 0) { throw "Nenhum cenário corresponde a: $($Cenario -join ', ')" }
 }
 
 $resultados = foreach ($c in $cenarios) {

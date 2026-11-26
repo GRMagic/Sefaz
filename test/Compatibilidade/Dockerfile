@@ -23,6 +23,7 @@ COPY --from=pacote /pacotes /pacotes
 COPY test/Compatibilidade/Consumidor/ ./
 RUN sed -i "s|<TargetFramework>.*</TargetFramework>|<TargetFramework>${TFM}</TargetFramework>|" Consumidor.csproj
 RUN for p in ${PACOTES_EXTRAS}; do dotnet add Consumidor.csproj package "${p%@*}" --version "${p#*@}" --no-restore || exit 1; done
-# Avisos viram erro: conflito de versão (NU1605/NU1608), vulnerabilidade conhecida (NU190x) ou framework sem suporte
+# Avisos viram erro: conflito de versão (NU1605/NU1608), vulnerabilidade conhecida (NU190x, só a partir do SDK 8,
+# que tem a auditoria do NuGet) ou framework sem suporte
 RUN dotnet build --configuration Release -warnaserror
 RUN dotnet run --configuration Release --no-build
